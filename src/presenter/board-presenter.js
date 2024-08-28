@@ -18,10 +18,14 @@ export default class BoardPresenter {
     render(new SortView(), this.boardComponent.getElement());
 
     render(this.pointListComponent, this.boardComponent.getElement());
-    render(new PointEditView(), this.pointListComponent.getElement());
+    render(
+      new PointEditView({ isNewPoint: true }),
+      this.pointListComponent.getElement()
+    );
 
     for (let index = 0; index < 3; index++) {
       render(new PointView(), this.pointListComponent.getElement());
     }
+    render(new PointEditView(), this.pointListComponent.getElement());
   };
 }
