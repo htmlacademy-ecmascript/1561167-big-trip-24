@@ -1,0 +1,2 @@
+(()=>{"use strict";const e=document.querySelector(".page-header").querySelector(".trip-main");!function(e,t,n="beforeend"){t.insertAdjacentElement(n,e.getElement())}(new class{getTemplate=()=>'<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>';getElement=()=>(this.element||(this.element=function(e){const t=document.createElement("div");return t.innerHTML=e,t.firstElementChild}(this.getTemplate())),this.element);removeElement=()=>this.element=null},e)})();
+//# sourceMappingURL=bundle.82d8260052ca80b25088.js.map
