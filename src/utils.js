@@ -8,4 +8,7 @@ const shuffle = (array) => {
   return mixedArray;
 };
 
-export { shuffle };
+const getDestinationById = ({ destinations, destinationId }) =>
+  destinations.find((destination) => destination.id === destinationId);
+
+export { shuffle, getDestinationById };
