@@ -1,15 +1,11 @@
-const shuffle = (array, isMixUp = false) => {
-  if (!isMixUp) {
-    return array;
-  }
-
-  const mixUpArray = [...array];
-  for (let i = mixUpArray.length - 1; i > 0; i--) {
+const shuffle = (array) => {
+  const mixedArray = [...array];
+  for (let i = mixedArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [mixUpArray[i], mixUpArray[j]] = [mixUpArray[j], mixUpArray[i]];
+    [mixedArray[i], mixedArray[j]] = [mixedArray[j], mixedArray[i]];
   }
 
-  return mixUpArray;
+  return mixedArray;
 };
 
 export { shuffle };

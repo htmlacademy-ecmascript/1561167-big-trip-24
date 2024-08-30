@@ -1,3 +1,4 @@
+import { POINT_COUNT } from '../const';
 import { shuffle } from '../utils';
 
 const mockPoints = [
@@ -653,11 +654,13 @@ const mockOffers = [
 ];
 
 const loadPoints = (isMixUp = false) => {
+  const pointCount = Math.min(POINT_COUNT, mockPoints.length);
+
   if (!isMixUp) {
-    return mockPoints;
+    return mockPoints.slice(0, pointCount);
   }
 
-  return shuffle(mockPoints);
+  return shuffle(mockPoints).slice(0, pointCount);
 };
 const loadDestinations = () => mockDestinations;
 const loadOffers = () => mockOffers;
