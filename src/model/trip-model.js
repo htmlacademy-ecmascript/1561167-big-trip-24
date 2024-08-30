@@ -1,13 +1,13 @@
 import { loadDestinations, loadOffers, loadPoints } from '../mock/mock';
 
 export default class TripModel {
-  points = loadPoints(true);
-  destination = loadDestinations();
+  points = loadPoints();
+  destinations = loadDestinations();
   offers = loadOffers();
 
   getPoints = () => this.points;
 
-  getDestinations = () => this.destination;
+  getDestinations = () => this.destinations;
 
   getOffers = () => this.offers;
 }

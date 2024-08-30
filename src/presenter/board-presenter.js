@@ -9,11 +9,14 @@ export default class BoardPresenter {
   boardComponent = new BoardView();
   pointListComponent = new PointListView();
 
-  constructor({ boardContainer }) {
+  constructor({ boardContainer, tripModel }) {
     this.boardContainer = boardContainer;
+    this.tripModel = tripModel;
   }
 
   init = () => {
+    this.boardPoints = [...this.tripModel.getPoints()];
+
     render(this.boardComponent, this.boardContainer);
     render(new SortView(), this.boardComponent.getElement());
 
@@ -23,9 +26,10 @@ export default class BoardPresenter {
       this.pointListComponent.getElement()
     );
 
-    for (let index = 0; index < 3; index++) {
-      render(new PointView(), this.pointListComponent.getElement());
-    }
+    this.boardPoints.forEach((point) =>
+      render(new PointView({ point }), this.pointListComponent.getElement())
+    );
+
     render(new PointEditView(), this.pointListComponent.getElement());
   };
 }
