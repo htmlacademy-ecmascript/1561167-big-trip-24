@@ -1,47 +1,114 @@
+import {
+  FULL_MACHINE_DATE_TEMPLATE,
+  MACHINE_DATE_TEMPLATE,
+  TIME_TEMPLATE,
+} from '../const.js';
 import { createElement } from '../render.js';
+import {
+  getSelectedOffersByType,
+  humanizeDateFormat,
+  humanizeDurationEvent,
+} from '../utils/utils.js';
 
-const createPointTemplate = () => `
-  <li class="trip-events__item">
-    <div class="event">
-      <time class="event__date" datetime="2019-03-18">MAR 18</time>
-      <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
-      </div>
-      <h3 class="event__title">Taxi Amsterdam</h3>
-      <div class="event__schedule">
-        <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
-          —
-          <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
-        </p>
-        <p class="event__duration">30M</p>
-      </div>
-      <p class="event__price">
-        €&nbsp;<span class="event__price-value">20</span>
-      </p>
-      <h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">
-        <li class="event__offer">
-          <span class="event__offer-title">Order Uber</span>
-          +€&nbsp;
-          <span class="event__offer-price">20</span>
-        </li>
-      </ul>
-      <button class="event__favorite-btn event__favorite-btn--active" type="button">
-        <span class="visually-hidden">Add to favorite</span>
-        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
-        </svg>
-      </button>
-      <button class="event__rollup-btn" type="button">
-        <span class="visually-hidden">Open event</span>
-      </button>
-    </div>
+const createOfferItemTemplate = ({ title, price }) => `
+  <li class="event__offer">
+    <span class="event__offer-title">${title}</span>
+    +€&nbsp;
+    <span class="event__offer-price">${price}</span>
   </li>
 `;
 
+const createSelectedOffersTemplate = ({ point, offers }) => {
+  const selectedOffers = getSelectedOffersByType({ point, offers });
+
+  if (!selectedOffers.length) {
+    return '';
+  }
+
+  return `
+    <h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers">
+    ${selectedOffers.map((offer) => createOfferItemTemplate(offer)).join('')}
+    </ul>
+  `;
+};
+
+const createPointTemplate = ({ point, destination, offers }) => {
+  const { type: pointType, basePrice, isFavorite, dateFrom, dateTo } = point;
+  const { name } = destination;
+  const classFavoriteBtnActive = isFavorite
+    ? ' event__favorite-btn--active'
+    : '';
+  const startTimeTemplate = humanizeDateFormat(dateFrom, TIME_TEMPLATE);
+  const endTimeTemplate = humanizeDateFormat(dateTo, TIME_TEMPLATE);
+  const fullMachineDateFromTemplate = humanizeDateFormat(
+    dateFrom,
+    FULL_MACHINE_DATE_TEMPLATE
+  );
+  const fullMachineDateToTemplate = humanizeDateFormat(
+    dateTo,
+    FULL_MACHINE_DATE_TEMPLATE
+  );
+  return `
+    <li class="trip-events__item">
+      <div class="event">
+        <time
+          class="event__date"
+          datetime="${humanizeDateFormat(dateFrom, MACHINE_DATE_TEMPLATE)}">
+          ${humanizeDateFormat(dateFrom)}
+        </time>
+        <div class="event__type">
+          <img class="event__type-icon" width="42" height="42"
+            src="img/icons/${pointType}.png"
+            alt="Event type icon"
+          >
+        </div>
+        <h3 class="event__title">${pointType} ${name}</h3>
+        <div class="event__schedule">
+          <p class="event__time">
+            <time class="event__start-time" datetime="${fullMachineDateFromTemplate}">
+              ${startTimeTemplate}
+            </time>
+            —
+            <time class="event__end-time" datetime="${fullMachineDateToTemplate}">
+              ${endTimeTemplate}
+            </time>
+          </p>
+          <p class="event__duration">
+            ${humanizeDurationEvent(dateFrom, dateTo)}
+          </p>
+        </div>
+        <p class="event__price">
+          €&nbsp;<span class="event__price-value">${basePrice}</span>
+        </p>
+        ${createSelectedOffersTemplate({ point, offers })}
+        <button class="event__favorite-btn${classFavoriteBtnActive}" type="button">
+          <span class="visually-hidden">Add to favorite</span>
+          <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+            <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
+          </svg>
+        </button>
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
+      </div>
+    </li>
+  `;
+};
+
 export default class PointView {
-  getTemplate = () => createPointTemplate();
+  constructor({ point, destination, offers }) {
+    this.point = point;
+    this.destination = destination;
+    this.offers = offers;
+  }
+
+  getTemplate = () =>
+    createPointTemplate({
+      point: this.point,
+      destination: this.destination,
+      offers: this.offers,
+    });
 
   getElement = () => {
     if (!this.element) {

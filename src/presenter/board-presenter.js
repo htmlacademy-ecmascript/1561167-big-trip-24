@@ -1,5 +1,5 @@
 import { render } from '../render';
-import { getDestinationById } from '../utils';
+import { getDestinationById } from '../utils/utils';
 import BoardView from '../view/board-view';
 import PointEditView from '../view/point-edit-view';
 import PointListView from '../view/point-list-view';
@@ -17,6 +17,7 @@ export default class BoardPresenter {
 
   init = () => {
     this.boardPoints = [...this.tripModel.getPoints()];
+    this.offers = this.tripModel.getOffers();
 
     render(this.boardComponent, this.boardContainer);
     render(new SortView(), this.boardComponent.getElement());
@@ -32,13 +33,12 @@ export default class BoardPresenter {
         destinations: this.tripModel.getDestinations(),
         destinationId: point.destination,
       });
-      const offers = this.tripModel.getOffers();
 
       render(
         new PointView({
           point,
           destination,
-          offers,
+          offers: this.offers,
         }),
         this.pointListComponent.getElement()
       );

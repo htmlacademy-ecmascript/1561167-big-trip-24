@@ -1,5 +1,5 @@
 import { POINT_COUNT } from '../const';
-import { shuffle } from '../utils';
+import { shuffle } from '../utils/utils';
 
 const mockPoints = [
   {
