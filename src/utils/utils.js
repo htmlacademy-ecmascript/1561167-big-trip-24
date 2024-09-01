@@ -47,8 +47,14 @@ const shuffle = (array) => {
   return mixedArray;
 };
 
+const firstLetterToUpperCase = (word) =>
+  word.at(0).toUpperCase() + word.slice(1);
+
 const getDestinationById = ({ destinations, destinationId }) =>
-  destinations.find((destination) => destination.id === destinationId);
+  destinations.find((destination) => destination.id === destinationId) ?? '';
+
+const getDestinationListNames = (destinations) =>
+  destinations.map(({ name }) => name);
 
 const getOffersByType = ({ type, offers }) =>
   offers.find((offer) => offer.type === type).offers;
@@ -72,4 +78,6 @@ export {
   getDestinationById,
   getOffersByType,
   getSelectedOffersByType,
+  firstLetterToUpperCase,
+  getDestinationListNames,
 };

@@ -20,6 +20,48 @@ const MACHINE_DATE_TEMPLATE = 'YYYY-MM-DD';
 const TIME_TEMPLATE = 'HH:mm';
 const FULL_MACHINE_DATE_TEMPLATE = `${MACHINE_DATE_TEMPLATE}[T]${TIME_TEMPLATE}`;
 
+const PointType = {
+  TAXI: 'taxi',
+  BUS: 'bus',
+  TRAIN: 'train',
+  SHIP: 'ship',
+  DRIVE: 'drive',
+  FLIGHT: 'flight',
+  CHECK: 'check-in',
+  SIGHTSEEING: 'sightseeing',
+  RESTAURANT: 'restaurant',
+};
+
+const DEFAULT_POINT_TYPE = PointType.FLIGHT;
+
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
+};
+
+const ACCEPTABLE_SORTING = [SortType.DAY, SortType.TIME, SortType.PRICE];
+
+const BLANK_POINT = {
+  id: '',
+  basePrice: 0,
+  dateFrom: '',
+  dateTo: '',
+  destination: '',
+  isFavorite: false,
+  offers: [],
+  type: DEFAULT_POINT_TYPE,
+};
+
 export {
   POINT_COUNT,
   MSEC_IN_HOUR,
@@ -32,4 +74,10 @@ export {
   MACHINE_DATE_TEMPLATE,
   FULL_MACHINE_DATE_TEMPLATE,
   TIME_TEMPLATE,
+  PointType,
+  DEFAULT_POINT_TYPE,
+  FilterType,
+  SortType,
+  ACCEPTABLE_SORTING,
+  BLANK_POINT,
 };
