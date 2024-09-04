@@ -5,6 +5,7 @@ import {
 } from '../const.js';
 import { createElement } from '../render.js';
 import {
+  getDestinationById,
   getSelectedOffersByType,
   humanizeDateFormat,
   humanizeDurationEvent,
@@ -33,11 +34,14 @@ const createSelectedOffersTemplate = ({ point, offers }) => {
   `;
 };
 
-const createPointTemplate = ({ point, destination, offers }) => {
+const createPointTemplate = ({ point, destinations, offers }) => {
   const { type: pointType, basePrice, isFavorite, dateFrom, dateTo } = point;
-  const { name } = destination;
+  const destinationName = getDestinationById({
+    destinationId: point.destination,
+    destinations,
+  });
   const classFavoriteBtnActive = isFavorite
-    ? ' event__favorite-btn--active'
+    ? 'event__favorite-btn--active'
     : '';
   const startTimeTemplate = humanizeDateFormat(dateFrom, TIME_TEMPLATE);
   const endTimeTemplate = humanizeDateFormat(dateTo, TIME_TEMPLATE);
@@ -63,7 +67,10 @@ const createPointTemplate = ({ point, destination, offers }) => {
             alt="Event type icon"
           >
         </div>
-        <h3 class="event__title">${pointType} ${name}</h3>
+        <h3 class="event__title">
+          ${pointType}
+          ${destinationName ? destinationName.name : ''}
+        </h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${fullMachineDateFromTemplate}">
@@ -82,7 +89,7 @@ const createPointTemplate = ({ point, destination, offers }) => {
           €&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         ${createSelectedOffersTemplate({ point, offers })}
-        <button class="event__favorite-btn${classFavoriteBtnActive}" type="button">
+        <button class="event__favorite-btn ${classFavoriteBtnActive}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
             <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
@@ -97,16 +104,16 @@ const createPointTemplate = ({ point, destination, offers }) => {
 };
 
 export default class PointView {
-  constructor({ point, destination, offers }) {
+  constructor({ point, destinations, offers }) {
     this.point = point;
-    this.destination = destination;
+    this.destinations = destinations;
     this.offers = offers;
   }
 
   getTemplate = () =>
     createPointTemplate({
       point: this.point,
-      destination: this.destination,
+      destinations: this.destinations,
       offers: this.offers,
     });
 

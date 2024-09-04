@@ -50,8 +50,13 @@ const shuffle = (array) => {
 const firstLetterToUpperCase = (word) =>
   word.at(0).toUpperCase() + word.slice(1);
 
+const getLastWord = (value) => {
+  const words = value.split(/[\s,]+/);
+  return words[words.length - 1];
+};
+
 const getDestinationById = ({ destinations, destinationId }) =>
-  destinations.find((destination) => destination.id === destinationId) ?? '';
+  destinations.find((destination) => destination.id === destinationId);
 
 const getDestinationListNames = (destinations) =>
   destinations.map(({ name }) => name);
@@ -60,14 +65,14 @@ const getOffersByType = ({ type, offers }) =>
   offers.find((offer) => offer.type === type).offers;
 
 const getSelectedOffersByType = ({ point, offers }) => {
-  const { type, offers: pointOffers } = point;
-  const offersByType = getOffersByType({ type, offers });
+  const { type, offers: selectedOffers } = point;
+  const availableOffers = getOffersByType({ type, offers });
 
-  if (!offersByType.length || !pointOffers.length) {
+  if (!availableOffers.length || !selectedOffers.length) {
     return [];
   }
 
-  return offersByType.filter((offer) => pointOffers.includes(offer.id));
+  return availableOffers.filter((offer) => selectedOffers.includes(offer.id));
 };
 
 export {
@@ -80,4 +85,5 @@ export {
   getSelectedOffersByType,
   firstLetterToUpperCase,
   getDestinationListNames,
+  getLastWord,
 };

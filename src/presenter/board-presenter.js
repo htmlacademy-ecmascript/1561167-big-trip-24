@@ -1,6 +1,5 @@
 import { BLANK_POINT } from '../const';
 import { render } from '../render';
-import { getDestinationById } from '../utils/utils';
 import BoardView from '../view/board-view';
 import PointEditView from '../view/point-edit-view';
 import PointListView from '../view/point-list-view';
@@ -36,15 +35,10 @@ export default class BoardPresenter {
     );
 
     this.boardPoints.forEach((point) => {
-      const destinationPoint = getDestinationById({
-        destinations: this.tripModel.getDestinations(),
-        destinationId: point.destination,
-      });
-
       render(
         new PointView({
           point,
-          destination: destinationPoint,
+          destinations: this.destinations,
           offers: this.offers,
         }),
         this.pointListComponent.getElement()
@@ -53,7 +47,7 @@ export default class BoardPresenter {
     // debugger;
     render(
       new PointEditView({
-        point: this.boardPoints[0],
+        point: this.boardPoints[1],
         destinations: this.destinations,
         offers: this.offers,
         isNewPoint: true,

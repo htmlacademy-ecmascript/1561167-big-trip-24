@@ -4,6 +4,7 @@ import {
   firstLetterToUpperCase,
   getDestinationById,
   getDestinationListNames,
+  getLastWord,
   getOffersByType,
   humanizeDateFormat,
 } from '../utils/utils.js';
@@ -50,58 +51,50 @@ const createPointTypeListTemplate = (currentPointType) => {
   `;
 };
 
-const createOffersDetailsTemplate = ({ point, offers }) => {
-  const offersByType = getOffersByType({ offers, type: point.type });
-  console.log('createOffersDetailsTemplate  offersByType:', offersByType);
+const createOffersItemTemplate = ({
+  availableOffer: { id, title, price },
+  idSelectedOffers,
+}) => {
+  const isChecked = idSelectedOffers.includes(id);
+
+  return `
+    <div class="event__offer-selector">
+      <input
+        class="event__offer-checkbox  visually-hidden"
+        id="event-offer-${id}"
+        type="checkbox"
+        name="event-offer-${getLastWord(title)}"
+        ${isChecked ? 'checked' : ''}>
+      <label class="event__offer-label"
+        for="event-offer-${id}">
+        <span class="event__offer-title">${title}</span>
+        +€&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </label>
+    </div>
+  `;
+};
+
+const createAvailableOffersTemplate = ({ point, offers }) => {
+  const availableOffers = getOffersByType({ offers, type: point.type });
+  const offersItemTemplate = availableOffers
+    .map((availableOffer) =>
+      createOffersItemTemplate({
+        availableOffer,
+        idSelectedOffers: point.offers,
+      })
+    )
+    .join('');
+
+  if (!offers.length || !availableOffers.length) {
+    return '';
+  }
+
   return `
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
       <div class="event__available-offers">
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-          <label class="event__offer-label" for="event-offer-luggage-1">
-            <span class="event__offer-title">Add luggage</span>
-            +€&nbsp;
-            <span class="event__offer-price">30</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-          <label class="event__offer-label" for="event-offer-comfort-1">
-            <span class="event__offer-title">Switch to comfort class</span>
-            +€&nbsp;
-            <span class="event__offer-price">100</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-          <label class="event__offer-label" for="event-offer-meal-1">
-            <span class="event__offer-title">Add meal</span>
-            +€&nbsp;
-            <span class="event__offer-price">15</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-          <label class="event__offer-label" for="event-offer-seats-1">
-            <span class="event__offer-title">Choose seats</span>
-            +€&nbsp;
-            <span class="event__offer-price">5</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-          <label class="event__offer-label" for="event-offer-train-1">
-            <span class="event__offer-title">Travel by train</span>
-            +€&nbsp;
-            <span class="event__offer-price">40</span>
-          </label>
-        </div>
+        ${offersItemTemplate}
       </div>
     </section>`;
 };
@@ -111,7 +104,11 @@ const createDestinationDetailsTemplate = ({ point, destinations }) => {
     destinations,
     destinationId: point.destination,
   });
-  console.log('createDestinationDetailsTemplate  destination:', destination);
+
+  if (!destination) {
+    return '';
+  }
+
   return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -130,13 +127,16 @@ const createDestinationDetailsTemplate = ({ point, destinations }) => {
 };
 
 const createPointDetailsTemplate = ({ point, destinations, offers }) => {
-  const offersDetailsTemplate = createOffersDetailsTemplate({ point, offers });
+  const offersDetailsTemplate = createAvailableOffersTemplate({
+    point,
+    offers,
+  });
   const destinationDetailsTemplate = createDestinationDetailsTemplate({
     point,
     destinations,
   });
 
-  if (!offersDetailsTemplate.length || !destinationDetailsTemplate.length) {
+  if (!offersDetailsTemplate.length && !destinationDetailsTemplate.length) {
     return '';
   }
 
@@ -165,7 +165,7 @@ const createPointEditTemplate = ({
     getDestinationById({
       destinations,
       destinationId,
-    }).name ?? '';
+    })?.name ?? '';
   const dateFromPointTemplate = humanizeDateFormat(
     dateFrom,
     DATE_EVENT_TEMPLATE
