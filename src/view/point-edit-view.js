@@ -1,4 +1,4 @@
-import { DATE_EVENT_TEMPLATE, PointType } from '../const.js';
+import { DateFormat, PointType } from '../const.js';
 import { createElement } from '../render.js';
 import {
   firstLetterToUpperCase,
@@ -184,9 +184,12 @@ const createPointEditTemplate = ({
     })?.name ?? '';
   const dateFromPointTemplate = humanizeDateFormat(
     dateFrom,
-    DATE_EVENT_TEMPLATE
+    DateFormat.EVENT_TEMPLATE
   );
-  const dateToPointTemplate = humanizeDateFormat(dateTo, DATE_EVENT_TEMPLATE);
+  const dateToPointTemplate = humanizeDateFormat(
+    dateTo,
+    DateFormat.EVENT_TEMPLATE
+  );
   const rollupButtonTemplate = !isNewPoint
     ? `<button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>

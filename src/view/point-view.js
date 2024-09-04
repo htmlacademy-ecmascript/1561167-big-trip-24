@@ -1,8 +1,4 @@
-import {
-  FULL_MACHINE_DATE_TEMPLATE,
-  MACHINE_DATE_TEMPLATE,
-  TIME_TEMPLATE,
-} from '../const.js';
+import { DateFormat } from '../const.js';
 import { createElement } from '../render.js';
 import {
   getDestinationById,
@@ -43,22 +39,29 @@ const createPointTemplate = ({ point, destinations, offers }) => {
   const classFavoriteBtnActive = isFavorite
     ? 'event__favorite-btn--active'
     : '';
-  const startTimeTemplate = humanizeDateFormat(dateFrom, TIME_TEMPLATE);
-  const endTimeTemplate = humanizeDateFormat(dateTo, TIME_TEMPLATE);
+  const machineDateFromTemplate = humanizeDateFormat(
+    dateFrom,
+    DateFormat.MACHINE_TEMPLATE
+  );
+  const startTimeTemplate = humanizeDateFormat(
+    dateFrom,
+    DateFormat.TIME_TEMPLATE
+  );
+  const endTimeTemplate = humanizeDateFormat(dateTo, DateFormat.TIME_TEMPLATE);
   const fullMachineDateFromTemplate = humanizeDateFormat(
     dateFrom,
-    FULL_MACHINE_DATE_TEMPLATE
+    DateFormat.FULL_MACHINE_TEMPLATE
   );
   const fullMachineDateToTemplate = humanizeDateFormat(
     dateTo,
-    FULL_MACHINE_DATE_TEMPLATE
+    DateFormat.FULL_MACHINE_TEMPLATE
   );
   return `
     <li class="trip-events__item">
       <div class="event">
         <time
           class="event__date"
-          datetime="${humanizeDateFormat(dateFrom, MACHINE_DATE_TEMPLATE)}">
+          datetime="${machineDateFromTemplate}">
           ${humanizeDateFormat(dateFrom)}
         </time>
         <div class="event__type">
