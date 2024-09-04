@@ -47,7 +47,7 @@ export default class BoardPresenter {
     // debugger;
     render(
       new PointEditView({
-        point: this.boardPoints[1],
+        point: this.boardPoints[3],
         destinations: this.destinations,
         offers: this.offers,
         isNewPoint: true,

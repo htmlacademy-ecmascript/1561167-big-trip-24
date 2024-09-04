@@ -1,4 +1,4 @@
-const POINT_COUNT = 2;
+const POINT_COUNT = 5;
 
 const MSEC_IN_SEC = 1000;
 const SEC_IN_MIN = 60;

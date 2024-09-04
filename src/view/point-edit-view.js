@@ -99,11 +99,32 @@ const createAvailableOffersTemplate = ({ point, offers }) => {
     </section>`;
 };
 
+const createPhotoTemplate = ({ src, description }) => `
+  <img class="event__photo" src="${src}" alt="${description}">
+`;
+
+const createPhotosTapeTemplate = (pictures) => {
+  if (!pictures || !pictures.length) {
+    return '';
+  }
+
+  const photoTemplate = pictures.map(createPhotoTemplate).join('');
+
+  return `
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${photoTemplate}
+      </div>
+    </div>
+  `;
+};
+
 const createDestinationDetailsTemplate = ({ point, destinations }) => {
   const destination = getDestinationById({
     destinations,
     destinationId: point.destination,
   });
+  const photosTapeTemplate = createPhotosTapeTemplate(destination?.pictures);
 
   if (!destination) {
     return '';
@@ -111,18 +132,13 @@ const createDestinationDetailsTemplate = ({ point, destinations }) => {
 
   return `
     <section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
-
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
-        </div>
-      </div>
+      <h3 class="event__section-title  event__section-title--destination">
+        ${destination.name}
+      </h3>
+      <p class="event__destination-description">
+        ${destination.description}
+      </p>
+      ${photosTapeTemplate}
     </section>`;
 };
 
