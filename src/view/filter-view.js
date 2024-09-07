@@ -1,4 +1,4 @@
-import { FilterType } from '../const';
+import { DEFAULT_FILTER_TYPE, FilterType } from '../const';
 import { createElement } from '../render';
 
 const createFilterItemTemplate = (filter, isActive) => `
@@ -6,14 +6,17 @@ const createFilterItemTemplate = (filter, isActive) => `
     <input id="filter-${filter}"
       class="trip-filters__filter-input  visually-hidden" type="radio"
       name="trip-filter"
-      value="${filter} "${isActive ? 'checked' : ''}>
-    <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
+      value="${filter}
+      "${isActive ? 'checked' : ''}>
+    <label class="trip-filters__filter-label" for="filter-${filter}">${filter}</label>
   </div>
 `;
 
 const createFilterTemplate = () => {
   const filterTemplate = Object.values(FilterType)
-    .map((filter, index) => createFilterItemTemplate(filter, index === 0))
+    .map((filter) =>
+      createFilterItemTemplate(filter, filter === DEFAULT_FILTER_TYPE)
+    )
     .join('');
   return `
     <form class="trip-filters" action="#" method="get">

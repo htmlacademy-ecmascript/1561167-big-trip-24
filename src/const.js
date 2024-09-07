@@ -39,6 +39,8 @@ const FilterType = {
   PAST: 'past',
 };
 
+const DEFAULT_FILTER_TYPE = FilterType.EVERYTHING;
+
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -46,6 +48,8 @@ const SortType = {
   PRICE: 'price',
   OFFERS: 'offers',
 };
+
+const DEFAULT_SORTING_TYPE = SortType.DAY;
 
 const ACCEPTABLE_SORTING = [SortType.DAY, SortType.TIME, SortType.PRICE];
 
@@ -68,7 +72,9 @@ export {
   PointType,
   DEFAULT_POINT_TYPE,
   FilterType,
+  DEFAULT_FILTER_TYPE,
   SortType,
+  DEFAULT_SORTING_TYPE,
   ACCEPTABLE_SORTING,
   BLANK_POINT,
 };

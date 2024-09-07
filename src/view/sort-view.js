@@ -1,4 +1,4 @@
-import { ACCEPTABLE_SORTING, SortType } from '../const';
+import { ACCEPTABLE_SORTING, DEFAULT_SORTING_TYPE, SortType } from '../const';
 import { createElement } from '../render';
 
 const createSortItemTemplate = (sort, isActive) => `
@@ -16,7 +16,7 @@ const createSortItemTemplate = (sort, isActive) => `
 
 const createSortTemplate = () => {
   const sortTemplate = Object.values(SortType)
-    .map((sort, index) => createSortItemTemplate(sort, index === 0))
+    .map((sort) => createSortItemTemplate(sort, sort === DEFAULT_SORTING_TYPE))
     .join('');
   return `
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
