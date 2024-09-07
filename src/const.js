@@ -1,14 +1,7 @@
 const POINT_COUNT = 5;
 
-const MSEC_IN_SEC = 1000;
-const SEC_IN_MIN = 60;
-const MIN_IN_HOUR = 60;
-const HOUR_IN_DAY = 24;
-
-const MSEC_IN_HOUR = MIN_IN_HOUR * SEC_IN_MIN * MSEC_IN_SEC;
-const MSEC_IN_DAY = HOUR_IN_DAY * MSEC_IN_HOUR;
-
 const DateFormat = {
+  TIME_TEMPLATE: 'HH:mm',
   EVENT_TEMPLATE: 'DD/MM/YY hh:mm',
   INVERTED_SHORT_TEMPLATE: 'MMM DD',
   AVERAGE_EVENT_DURATION_TEMPLATE: 'HH[H] mm[M]',
@@ -66,8 +59,6 @@ const BLANK_POINT = {
 
 export {
   POINT_COUNT,
-  MSEC_IN_HOUR,
-  MSEC_IN_DAY,
   DateFormat,
   PointType,
   DEFAULT_POINT_TYPE,

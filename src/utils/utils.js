@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { DateFormat, MSEC_IN_DAY, MSEC_IN_HOUR } from '../const';
+import { DateFormat } from '../const';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -18,21 +18,34 @@ const humanizeDateFormat = (
 ) => (date ? dayjs(date).format(template) : '');
 
 const humanizeDurationEvent = (dateFrom, dateTo) => {
-  const diffTimeshtamp = getDurationEvent(dateFrom, dateTo);
+  const diffTimestamp = getDurationEvent(dateFrom, dateTo);
+  const eventDuration = dayjs.duration(diffTimestamp);
+  const days = Math.floor(eventDuration.asDays());
+  const hours = eventDuration.hours();
+  const minutes = eventDuration.minutes();
 
-  if (diffTimeshtamp >= MSEC_IN_DAY) {
-    return dayjs
-      .duration(diffTimeshtamp)
-      .format(DateFormat.LONG_EVENT_DURATION_TEMPLATE);
+  const getFromScratch = (value) => `0${value}`.slice(-2);
+
+  let daysFormat = '';
+  let hoursFormat = '';
+  let minutesFormat = '';
+
+  if (days) {
+    daysFormat = days < 10 ? `0${days}D ` : `${days}D `;
+    hoursFormat = '00H ';
+    minutesFormat = '00M';
   }
-  if (diffTimeshtamp >= MSEC_IN_HOUR) {
-    return dayjs
-      .duration(diffTimeshtamp)
-      .format(DateFormat.AVERAGE_EVENT_DURATION_TEMPLATE);
+
+  if (hours) {
+    hoursFormat = getFromScratch(hours).concat('H ');
+    minutesFormat = '00M';
   }
-  return dayjs
-    .duration(diffTimeshtamp)
-    .format(DateFormat.SHORT_EVENT_DURATION_TEMPLATE);
+
+  if (minutes) {
+    minutesFormat = getFromScratch(minutes).concat('M');
+  }
+
+  return daysFormat + hoursFormat + minutesFormat;
 };
 
 const shuffle = (items) => {
