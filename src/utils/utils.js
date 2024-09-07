@@ -35,17 +35,18 @@ const humanizeDurationEvent = (dateFrom, dateTo) => {
     .format(DateFormat.SHORT_EVENT_DURATION_TEMPLATE);
 };
 
-const shuffle = (array) => {
-  const mixedArray = [...array];
-  for (let i = mixedArray.length - 1; i > 0; i--) {
+const shuffle = (items) => {
+  const mixedItems = [...items];
+
+  for (let i = mixedItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [mixedArray[i], mixedArray[j]] = [mixedArray[j], mixedArray[i]];
+    [mixedItems[i], mixedItems[j]] = [mixedItems[j], mixedItems[i]];
   }
 
-  return mixedArray;
+  return mixedItems;
 };
 
-const firstLetterToUpperCase = (word) =>
+const getUppercaseFirstLetter = (word) =>
   word.at(0).toUpperCase() + word.slice(1);
 
 const getLastWord = (value) => {
@@ -81,7 +82,7 @@ export {
   getDestinationById,
   getOffersByType,
   getSelectedOffersByType,
-  firstLetterToUpperCase,
+  getUppercaseFirstLetter,
   getDestinationListNames,
   getLastWord,
 };

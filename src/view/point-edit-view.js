@@ -1,7 +1,7 @@
 import { DateFormat, PointType } from '../const.js';
 import { createElement } from '../render.js';
 import {
-  firstLetterToUpperCase,
+  getUppercaseFirstLetter,
   getDestinationById,
   getDestinationListNames,
   getLastWord,
@@ -31,7 +31,7 @@ const createPointTypeItemTemplate = (pointType, isActive) => `
       value="${pointType}"
       ${isActive ? 'checked' : ''}>
     <label class="event__type-label  event__type-label--${pointType}"
-      for="event-type-${pointType}-1">${firstLetterToUpperCase(pointType)}
+      for="event-type-${pointType}-1">${getUppercaseFirstLetter(pointType)}
     </label>
   </div>
 `;
@@ -216,7 +216,7 @@ const createPointEditTemplate = ({
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${firstLetterToUpperCase(type)}
+              ${getUppercaseFirstLetter(type)}
             </label>
             <input class="event__input  event__input--destination"
               id="event-destination-1"
