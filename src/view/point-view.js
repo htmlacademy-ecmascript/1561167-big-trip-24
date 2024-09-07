@@ -113,20 +113,23 @@ export default class PointView {
     this.offers = offers;
   }
 
-  getTemplate = () =>
-    createPointTemplate({
+  getTemplate() {
+    return createPointTemplate({
       point: this.point,
       destinations: this.destinations,
       offers: this.offers,
     });
+  }
 
-  getElement = () => {
+  getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
 
     return this.element;
-  };
+  }
 
-  removeElement = () => (this.element = null);
+  removeElement() {
+    this.element = null;
+  }
 }

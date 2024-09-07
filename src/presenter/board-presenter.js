@@ -15,7 +15,7 @@ export default class BoardPresenter {
     this.tripModel = tripModel;
   }
 
-  init = () => {
+  init() {
     this.boardPoints = [...this.tripModel.getPoints()];
     this.offers = this.tripModel.getOffers();
     this.destinations = this.tripModel.getDestinations();
@@ -44,7 +44,6 @@ export default class BoardPresenter {
         this.pointListComponent.getElement()
       );
     });
-    // debugger;
     render(
       new PointEditView({
         point: this.boardPoints[3],
@@ -54,5 +53,5 @@ export default class BoardPresenter {
       }),
       this.pointListComponent.getElement()
     );
-  };
+  }
 }

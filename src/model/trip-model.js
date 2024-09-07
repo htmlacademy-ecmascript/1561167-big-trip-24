@@ -5,9 +5,15 @@ export default class TripModel {
   destinations = loadDestinations();
   offers = loadOffers();
 
-  getPoints = () => this.points;
+  getPoints() {
+    return this.points;
+  }
 
-  getDestinations = () => this.destinations;
+  getDestinations() {
+    return this.destinations;
+  }
 
-  getOffers = () => this.offers;
+  getOffers() {
+    return this.offers;
+  }
 }

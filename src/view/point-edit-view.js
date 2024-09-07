@@ -75,13 +75,16 @@ const createOffersItemTemplate = ({
   `;
 };
 
-const createAvailableOffersTemplate = ({ point, offers }) => {
-  const availableOffers = getOffersByType({ offers, type: point.type });
+const createAvailableOffersTemplate = ({
+  point: { type, offers: idOffers },
+  offers,
+}) => {
+  const availableOffers = getOffersByType({ offers, type });
   const offersItemTemplate = availableOffers
     .map((availableOffer) =>
       createOffersItemTemplate({
         availableOffer,
-        idSelectedOffers: point.offers,
+        idSelectedOffers: idOffers,
       })
     )
     .join('');
@@ -260,21 +263,24 @@ export default class PointEditView {
     this.isNewPoint = isNewPoint;
   }
 
-  getTemplate = () =>
-    createPointEditTemplate({
+  getTemplate() {
+    return createPointEditTemplate({
       point: this.point,
       destinations: this.destinations,
       offers: this.offers,
       isNewPoint: this.isNewPoint,
     });
+  }
 
-  getElement = () => {
+  getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
 
     return this.element;
-  };
+  }
 
-  removeElement = () => (this.element = null);
+  removeElement() {
+    this.element = null;
+  }
 }

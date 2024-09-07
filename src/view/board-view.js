@@ -7,15 +7,19 @@ const createBoardTemplate = () => `
 `;
 
 export default class BoardView {
-  getTemplate = () => createBoardTemplate();
+  getTemplate() {
+    return createBoardTemplate();
+  }
 
-  getElement = () => {
+  getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
 
     return this.element;
-  };
+  }
 
-  removeElement = () => (this.element = null);
+  removeElement() {
+    this.element = null;
+  }
 }
