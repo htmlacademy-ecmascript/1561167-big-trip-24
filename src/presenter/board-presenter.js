@@ -49,7 +49,6 @@ export default class BoardPresenter {
         point: this.boardPoints[3],
         destinations: this.destinations,
         offers: this.offers,
-        isNewPoint: true,
       }),
       this.pointListComponent.getElement()
     );

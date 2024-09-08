@@ -24,7 +24,7 @@ const humanizeDurationEvent = (dateFrom, dateTo) => {
   const hours = eventDuration.hours();
   const minutes = eventDuration.minutes();
 
-  const getFromScratch = (value) => `0${value}`.slice(-2);
+  const getFromScratch = (value) => value.toString().padStart(2, '0');
 
   let daysFormat = '';
   let hoursFormat = '';

@@ -256,7 +256,7 @@ const createPointEditTemplate = ({
 };
 
 export default class PointEditView {
-  constructor({ point, destinations, offers, isNewPoint = true }) {
+  constructor({ point, destinations, offers, isNewPoint = false }) {
     this.point = point;
     this.destinations = destinations;
     this.offers = offers;
