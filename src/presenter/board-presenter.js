@@ -7,50 +7,57 @@ import PointView from '../view/point-view';
 import SortView from '../view/sort-view';
 
 export default class BoardPresenter {
-  boardComponent = new BoardView();
-  pointListComponent = new PointListView();
+  #boardContainer = null;
+  #tripModel = null;
+
+  #boardComponent = new BoardView();
+  #pointListComponent = new PointListView();
+
+  #boardPoints = [];
+  #offers = [];
+  #destinations = [];
 
   constructor({ boardContainer, tripModel }) {
-    this.boardContainer = boardContainer;
-    this.tripModel = tripModel;
+    this.#boardContainer = boardContainer;
+    this.#tripModel = tripModel;
   }
 
   init() {
-    this.boardPoints = [...this.tripModel.getPoints()];
-    this.offers = this.tripModel.getOffers();
-    this.destinations = this.tripModel.getDestinations();
+    this.#boardPoints = [...this.#tripModel.points];
+    this.#offers = this.#tripModel.offers;
+    this.#destinations = this.#tripModel.destinations;
 
-    render(this.boardComponent, this.boardContainer);
-    render(new SortView(), this.boardComponent.element);
+    render(this.#boardComponent, this.#boardContainer);
+    render(new SortView(), this.#boardComponent.element);
 
-    render(this.pointListComponent, this.boardComponent.element);
+    render(this.#pointListComponent, this.#boardComponent.element);
     render(
       new PointEditView({
         point: BLANK_POINT,
-        destinations: this.destinations,
-        offers: this.offers,
+        destinations: this.#destinations,
+        offers: this.#offers,
         isNewPoint: true,
       }),
-      this.pointListComponent.element
+      this.#pointListComponent.element
     );
 
-    this.boardPoints.forEach((point) => {
+    this.#boardPoints.forEach((point) => {
       render(
         new PointView({
           point,
-          destinations: this.destinations,
-          offers: this.offers,
+          destinations: this.#destinations,
+          offers: this.#offers,
         }),
-        this.pointListComponent.element
+        this.#pointListComponent.element
       );
     });
     render(
       new PointEditView({
-        point: this.boardPoints[3],
-        destinations: this.destinations,
-        offers: this.offers,
+        point: this.#boardPoints[3],
+        destinations: this.#destinations,
+        offers: this.#offers,
       }),
-      this.pointListComponent.element
+      this.#pointListComponent.element
     );
   }
 }

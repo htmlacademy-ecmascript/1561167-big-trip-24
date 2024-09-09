@@ -256,20 +256,25 @@ const createPointEditTemplate = ({
 };
 
 export default class PointEditView extends AbstractView {
+  #point = [];
+  #destinations = [];
+  #offers = [];
+  #isNewPoint = null;
+
   constructor({ point, destinations, offers, isNewPoint = false }) {
     super();
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
-    this.isNewPoint = isNewPoint;
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
+    this.#isNewPoint = isNewPoint;
   }
 
   get template() {
     return createPointEditTemplate({
-      point: this.point,
-      destinations: this.destinations,
-      offers: this.offers,
-      isNewPoint: this.isNewPoint,
+      point: this.#point,
+      destinations: this.#destinations,
+      offers: this.#offers,
+      isNewPoint: this.#isNewPoint,
     });
   }
 }
