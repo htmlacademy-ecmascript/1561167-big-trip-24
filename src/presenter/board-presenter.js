@@ -1,5 +1,5 @@
 import { BLANK_POINT } from '../const';
-import { render } from '../render';
+import { render } from '../framework/render';
 import BoardView from '../view/board-view';
 import PointEditView from '../view/point-edit-view';
 import PointListView from '../view/point-list-view';
@@ -21,9 +21,9 @@ export default class BoardPresenter {
     this.destinations = this.tripModel.getDestinations();
 
     render(this.boardComponent, this.boardContainer);
-    render(new SortView(), this.boardComponent.getElement());
+    render(new SortView(), this.boardComponent.element);
 
-    render(this.pointListComponent, this.boardComponent.getElement());
+    render(this.pointListComponent, this.boardComponent.element);
     render(
       new PointEditView({
         point: BLANK_POINT,
@@ -31,7 +31,7 @@ export default class BoardPresenter {
         offers: this.offers,
         isNewPoint: true,
       }),
-      this.pointListComponent.getElement()
+      this.pointListComponent.element
     );
 
     this.boardPoints.forEach((point) => {
@@ -41,7 +41,7 @@ export default class BoardPresenter {
           destinations: this.destinations,
           offers: this.offers,
         }),
-        this.pointListComponent.getElement()
+        this.pointListComponent.element
       );
     });
     render(
@@ -50,7 +50,7 @@ export default class BoardPresenter {
         destinations: this.destinations,
         offers: this.offers,
       }),
-      this.pointListComponent.getElement()
+      this.pointListComponent.element
     );
   }
 }

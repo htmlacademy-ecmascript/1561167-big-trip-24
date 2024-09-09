@@ -1,5 +1,5 @@
 import { DateFormat, PointType } from '../const.js';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {
   getUppercaseFirstLetter,
   getDestinationById,
@@ -255,32 +255,21 @@ const createPointEditTemplate = ({
   `;
 };
 
-export default class PointEditView {
+export default class PointEditView extends AbstractView {
   constructor({ point, destinations, offers, isNewPoint = false }) {
+    super();
     this.point = point;
     this.destinations = destinations;
     this.offers = offers;
     this.isNewPoint = isNewPoint;
   }
 
-  getTemplate() {
+  get template() {
     return createPointEditTemplate({
       point: this.point,
       destinations: this.destinations,
       offers: this.offers,
       isNewPoint: this.isNewPoint,
     });
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
