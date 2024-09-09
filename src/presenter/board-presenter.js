@@ -1,4 +1,3 @@
-import { BLANK_POINT } from '../const';
 import { render } from '../framework/render';
 import BoardView from '../view/board-view';
 import PointEditView from '../view/point-edit-view';
@@ -31,33 +30,18 @@ export default class BoardPresenter {
     render(new SortView(), this.#boardComponent.element);
 
     render(this.#pointListComponent, this.#boardComponent.element);
-    render(
-      new PointEditView({
-        point: BLANK_POINT,
-        destinations: this.#destinations,
-        offers: this.#offers,
-        isNewPoint: true,
-      }),
-      this.#pointListComponent.element
-    );
 
     this.#boardPoints.forEach((point) => {
-      render(
-        new PointView({
-          point,
-          destinations: this.#destinations,
-          offers: this.#offers,
-        }),
-        this.#pointListComponent.element
-      );
+      this.#renderPoint(point);
     });
-    render(
-      new PointEditView({
-        point: this.#boardPoints[3],
-        destinations: this.#destinations,
-        offers: this.#offers,
-      }),
-      this.#pointListComponent.element
-    );
+  }
+
+  #renderPoint(point) {
+    const pointComponent = new PointEditView({
+      point,
+      destinations: this.#destinations,
+      offers: this.#offers,
+    });
+    render(pointComponent, this.#pointListComponent.element);
   }
 }
