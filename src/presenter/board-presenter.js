@@ -37,7 +37,7 @@ export default class BoardPresenter {
   }
 
   #renderPoint(point) {
-    const pointComponent = new PointEditView({
+    const pointComponent = new PointView({
       point,
       destinations: this.#destinations,
       offers: this.#offers,
