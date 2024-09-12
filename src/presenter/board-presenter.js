@@ -26,6 +26,10 @@ export default class BoardPresenter {
     this.#offers = this.#tripModel.offers;
     this.#destinations = this.#tripModel.destinations;
 
+    this.#renderBoard();
+  }
+
+  #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
     render(new SortView(), this.#boardComponent.element);
 
