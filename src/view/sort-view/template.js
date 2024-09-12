@@ -1,5 +1,8 @@
-import { ACCEPTABLE_SORTING, DEFAULT_SORTING_TYPE, SortType } from '../const';
-import AbstractView from '../framework/view/abstract-view';
+import {
+  ACCEPTABLE_SORTING,
+  DEFAULT_SORTING_TYPE,
+  SortType,
+} from '../../const';
 
 const createSortItemTemplate = (sort, isActive) => `
   <div class="trip-sort__item  trip-sort__item--${sort}">
@@ -25,8 +28,4 @@ const createSortTemplate = () => {
   `;
 };
 
-export default class SortView extends AbstractView {
-  get template() {
-    return createSortTemplate();
-  }
-}
+export default createSortTemplate;

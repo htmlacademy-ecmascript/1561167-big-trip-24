@@ -1,5 +1,4 @@
-import { BLANK_POINT, DateFormat, PointType } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import { DateFormat, PointType } from '../../const.js';
 import {
   getUppercaseFirstLetter,
   getDestinationById,
@@ -7,7 +6,7 @@ import {
   getLastWord,
   getOffersByType,
   humanizeDateFormat,
-} from '../utils/utils.js';
+} from '../../utils/utils.js';
 
 const createDestinationListItemTemplate = (title) =>
   `<option value="${title}"></option>`;
@@ -255,44 +254,4 @@ const createPointEditTemplate = ({
   `;
 };
 
-export default class PointEditView extends AbstractView {
-  #point = [];
-  #destinations = [];
-  #offers = [];
-  #isNewPoint = null;
-
-  #handleFormSubmit = null;
-
-  constructor({
-    point = BLANK_POINT,
-    destinations,
-    offers,
-    isNewPoint = false,
-    onFormSubmit,
-  }) {
-    super();
-    this.#point = point;
-    this.#destinations = destinations;
-    this.#offers = offers;
-    this.#isNewPoint = isNewPoint;
-    this.#handleFormSubmit = onFormSubmit;
-
-    this.element
-      .querySelector('.event--edit')
-      .addEventListener('submit', this.#formSubmitHandler);
-  }
-
-  get template() {
-    return createPointEditTemplate({
-      point: this.#point,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      isNewPoint: this.#isNewPoint,
-    });
-  }
-
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleFormSubmit();
-  };
-}
+export default createPointEditTemplate;

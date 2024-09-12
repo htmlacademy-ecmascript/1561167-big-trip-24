@@ -1,9 +1,9 @@
 import { render, replace } from '../framework/render';
-import BoardView from '../view/board-view';
-import PointEditView from '../view/point-edit-view';
-import PointListView from '../view/point-list-view';
-import PointView from '../view/point-view';
-import SortView from '../view/sort-view';
+import BoardView from '../view/board-view/board-view';
+import PointEditView from '../view/point-edit-view/point-edit-view';
+import PointListView from '../view/point-list-view/point-list-view';
+import PointView from '../view/point-view/point-view';
+import SortView from '../view/sort-view/sort-view';
 
 export default class BoardPresenter {
   #boardContainer = null;

@@ -1,5 +1,4 @@
-import { DEFAULT_FILTER_TYPE, FilterType } from '../const';
-import AbstractView from '../framework/view/abstract-view';
+import { DEFAULT_FILTER_TYPE, FilterType } from '../../const';
 
 const createFilterItemTemplate = (filter, isActive) => `
   <div class="trip-filters__filter">
@@ -26,8 +25,4 @@ const createFilterTemplate = () => {
   `;
 };
 
-export default class FilterView extends AbstractView {
-  get template() {
-    return createFilterTemplate();
-  }
-}
+export default createFilterTemplate;
