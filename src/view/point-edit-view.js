@@ -1,4 +1,4 @@
-import { DateFormat, PointType } from '../const.js';
+import { BLANK_POINT, DateFormat, PointType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import {
   getUppercaseFirstLetter,
@@ -261,12 +261,25 @@ export default class PointEditView extends AbstractView {
   #offers = [];
   #isNewPoint = null;
 
-  constructor({ point, destinations, offers, isNewPoint = false }) {
+  #handleFormSubmit = null;
+
+  constructor({
+    point = BLANK_POINT,
+    destinations,
+    offers,
+    isNewPoint = false,
+    onFormSubmit,
+  }) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#isNewPoint = isNewPoint;
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element
+      .querySelector('.event--edit')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
@@ -277,4 +290,9 @@ export default class PointEditView extends AbstractView {
       isNewPoint: this.#isNewPoint,
     });
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }
