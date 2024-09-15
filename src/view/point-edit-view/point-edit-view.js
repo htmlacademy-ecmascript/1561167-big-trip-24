@@ -3,10 +3,10 @@ import AbstractView from '../../framework/view/abstract-view.js';
 import createPointEditTemplate from './template.js';
 
 export default class PointEditView extends AbstractView {
-  #point = [];
+  #point = null;
   #destinations = [];
   #offers = [];
-  #isNewPoint = null;
+  #isNewPoint = false;
 
   #handleFormSubmit = null;
 
@@ -14,14 +14,14 @@ export default class PointEditView extends AbstractView {
     point = BLANK_POINT,
     destinations,
     offers,
-    isNewPoint = false,
+    isNewPoint,
     onFormSubmit,
   }) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
-    this.#isNewPoint = isNewPoint;
+    this.#isNewPoint = isNewPoint ?? false;
     this.#handleFormSubmit = onFormSubmit;
 
     this.element
