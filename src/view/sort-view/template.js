@@ -1,5 +1,8 @@
-import { ACCEPTABLE_SORTING, DEFAULT_SORTING_TYPE, SortType } from '../const';
-import { createElement } from '../render';
+import {
+  ACCEPTABLE_SORTING,
+  DEFAULT_SORTING_TYPE,
+  SortType,
+} from '../../const';
 
 const createSortItemTemplate = (sort, isActive) => `
   <div class="trip-sort__item  trip-sort__item--${sort}">
@@ -25,20 +28,4 @@ const createSortTemplate = () => {
   `;
 };
 
-export default class SortView {
-  getTemplate() {
-    return createSortTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-}
+export default createSortTemplate;

@@ -1,5 +1,4 @@
-import { DEFAULT_FILTER_TYPE, FilterType } from '../const';
-import { createElement } from '../render';
+import { DEFAULT_FILTER_TYPE, FilterType } from '../../const';
 
 const createFilterItemTemplate = (filter, isActive) => `
   <div class="trip-filters__filter">
@@ -26,20 +25,4 @@ const createFilterTemplate = () => {
   `;
 };
 
-export default class FilterView {
-  getTemplate() {
-    return createFilterTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-}
+export default createFilterTemplate;

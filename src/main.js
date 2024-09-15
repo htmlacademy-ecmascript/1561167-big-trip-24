@@ -1,8 +1,8 @@
 import TripModel from './model/trip-model';
 import BoardPresenter from './presenter/board-presenter';
-import { render } from './render';
-import FilterView from './view/filter-view';
-import NewPointButtonView from './view/new-point-button-view';
+import { render } from './framework/render';
+import NewPointButtonView from './view/new-point-button-view/new-point-button-view';
+import FilterView from './view/filter-view/filter-view';
 
 const pageHeaderElement = document.querySelector('.page-header');
 const tripMainElement = pageHeaderElement.querySelector('.trip-main');

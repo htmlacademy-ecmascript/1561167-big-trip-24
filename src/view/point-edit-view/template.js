@@ -1,5 +1,4 @@
-import { DateFormat, PointType } from '../const.js';
-import { createElement } from '../render.js';
+import { DateFormat, PointType } from '../../const.js';
 import {
   getUppercaseFirstLetter,
   getDestinationById,
@@ -7,7 +6,7 @@ import {
   getLastWord,
   getOffersByType,
   humanizeDateFormat,
-} from '../utils/utils.js';
+} from '../../utils/utils.js';
 
 const createDestinationListItemTemplate = (title) =>
   `<option value="${title}"></option>`;
@@ -255,32 +254,4 @@ const createPointEditTemplate = ({
   `;
 };
 
-export default class PointEditView {
-  constructor({ point, destinations, offers, isNewPoint = false }) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
-    this.isNewPoint = isNewPoint;
-  }
-
-  getTemplate() {
-    return createPointEditTemplate({
-      point: this.point,
-      destinations: this.destinations,
-      offers: this.offers,
-      isNewPoint: this.isNewPoint,
-    });
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-}
+export default createPointEditTemplate;

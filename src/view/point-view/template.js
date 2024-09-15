@@ -1,11 +1,10 @@
-import { DateFormat } from '../const.js';
-import { createElement } from '../render.js';
+import { DateFormat } from '../../const.js';
 import {
   getDestinationById,
   getSelectedOffersByType,
   humanizeDateFormat,
   humanizeDurationEvent,
-} from '../utils/utils.js';
+} from '../../utils/utils.js';
 
 const createOfferItemTemplate = ({ title, price }) => `
   <li class="event__offer">
@@ -106,30 +105,4 @@ const createPointTemplate = ({ point, destinations, offers }) => {
   `;
 };
 
-export default class PointView {
-  constructor({ point, destinations, offers }) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
-  }
-
-  getTemplate() {
-    return createPointTemplate({
-      point: this.point,
-      destinations: this.destinations,
-      offers: this.offers,
-    });
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-}
+export default createPointTemplate;
