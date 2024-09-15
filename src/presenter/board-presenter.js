@@ -1,5 +1,7 @@
+import { DEFAULT_FILTER_TYPE } from '../const';
 import { render, replace } from '../framework/render';
 import BoardView from '../view/board-view/board-view';
+import NoPointsView from '../view/no-points-view/no-points-view';
 import PointEditView from '../view/point-edit-view/point-edit-view';
 import PointListView from '../view/point-list-view/point-list-view';
 import PointView from '../view/point-view/point-view';
@@ -16,6 +18,8 @@ export default class BoardPresenter {
   #offers = [];
   #destinations = [];
 
+  #filterType = DEFAULT_FILTER_TYPE;
+
   constructor({ boardContainer, tripModel }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
@@ -31,8 +35,13 @@ export default class BoardPresenter {
 
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
-    render(new SortView(), this.#boardComponent.element);
 
+    if (!this.#boardPoints.length) {
+      this.#renderNoPoints({ filterType: this.#filterType });
+      return;
+    }
+
+    render(new SortView(), this.#boardComponent.element);
     render(this.#pointListComponent, this.#boardComponent.element);
 
     this.#boardPoints.forEach((point) => {
@@ -80,5 +89,12 @@ export default class BoardPresenter {
     }
 
     render(pointComponent, this.#pointListComponent.element);
+  }
+
+  #renderNoPoints() {
+    const noPointsConponent = new NoPointsView({
+      filterType: this.#filterType,
+    });
+    render(noPointsConponent, this.#boardComponent.element);
   }
 }

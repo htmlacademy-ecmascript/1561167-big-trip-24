@@ -34,6 +34,13 @@ const FilterType = {
 
 const DEFAULT_FILTER_TYPE = FilterType.EVERYTHING;
 
+const TypeTextMessage = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
+};
+
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -68,4 +75,5 @@ export {
   DEFAULT_SORTING_TYPE,
   ACCEPTABLE_SORTING,
   BLANK_POINT,
+  TypeTextMessage,
 };
