@@ -92,9 +92,9 @@ export default class BoardPresenter {
   }
 
   #renderNoPoints() {
-    const noPointsConponent = new NoPointsView({
+    const noPointsComponent = new NoPointsView({
       filterType: this.#filterType,
     });
-    render(noPointsConponent, this.#boardComponent.element);
+    render(noPointsComponent, this.#boardComponent.element);
   }
 }

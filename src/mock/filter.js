@@ -1,7 +1,7 @@
-import { filter } from '../utils/filter.js';
+import { filterBy } from '../utils/filter.js';
 
 function generateFilter(points) {
-  return Object.entries(filter).map(([filterType, filterPoints]) => ({
+  return Object.entries(filterBy).map(([filterType, filterPoints]) => ({
     type: filterType,
     count: filterPoints(points).length,
   }));
