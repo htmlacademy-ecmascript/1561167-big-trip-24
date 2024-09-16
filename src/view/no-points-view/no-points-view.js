@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view';
-import createNoPointsTemplate from './tempate';
+import { createNoPointsTemplate } from './tempate';
 
 export default class NoPointsView extends AbstractView {
   #filterType = null;

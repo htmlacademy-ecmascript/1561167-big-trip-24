@@ -254,4 +254,4 @@ const createPointEditTemplate = ({
   `;
 };
 
-export default createPointEditTemplate;
+export { createPointEditTemplate };

@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
-import createPointTemplate from './template.js';
+import { createPointTemplate } from './template.js';
 
 export default class PointView extends AbstractView {
   #point = null;

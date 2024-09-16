@@ -1,6 +1,6 @@
 import { BLANK_POINT } from '../../const.js';
 import AbstractView from '../../framework/view/abstract-view.js';
-import createPointEditTemplate from './template.js';
+import { createPointEditTemplate } from './template.js';
 
 export default class PointEditView extends AbstractView {
   #point = null;
