@@ -4,4 +4,4 @@ const createBoardTemplate = () => `
   </section>
 `;
 
-export default createBoardTemplate;
+export { createBoardTemplate };

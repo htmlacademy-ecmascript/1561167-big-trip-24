@@ -105,4 +105,4 @@ const createPointTemplate = ({ point, destinations, offers }) => {
   `;
 };
 
-export default createPointTemplate;
+export { createPointTemplate };

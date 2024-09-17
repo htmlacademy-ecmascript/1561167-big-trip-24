@@ -87,6 +87,13 @@ const getSelectedOffersByType = ({ point, offers }) => {
   return availableOffers.filter((offer) => selectedOffers.includes(offer.id));
 };
 
+const isPointFuture = ({ dateFrom }) => dayjs().isBefore(dateFrom);
+
+const isPointPresent = ({ dateFrom, dateTo }) =>
+  dayjs().isAfter(dateFrom) && dayjs().isBefore(dateTo);
+
+const isPointPast = ({ dateTo }) => dayjs().isAfter(dateTo);
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
@@ -98,4 +105,7 @@ export {
   getUppercaseFirstLetter,
   getDestinationListNames,
   getLastWord,
+  isPointFuture,
+  isPointPresent,
+  isPointPast,
 };

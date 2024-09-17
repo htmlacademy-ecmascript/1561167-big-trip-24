@@ -28,4 +28,4 @@ const createSortTemplate = () => {
   `;
 };
 
-export default createSortTemplate;
+export { createSortTemplate };
