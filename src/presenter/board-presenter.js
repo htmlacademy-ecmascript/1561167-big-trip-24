@@ -9,11 +9,13 @@ import SortView from '../view/sort-view/sort-view';
 
 export default class BoardPresenter {
   #boardContainer = null;
-  #tripModel = null;
 
   #boardComponent = new BoardView();
   #pointListComponent = new PointListView();
+  #noPointsComponent = null;
+  #sortComponent = new SortView();
 
+  #tripModel = null;
   #boardPoints = [];
   #offers = [];
   #destinations = [];
@@ -41,10 +43,28 @@ export default class BoardPresenter {
       return;
     }
 
-    render(new SortView(), this.#boardComponent.element);
-    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderSort();
+    this.#renderPointList();
+  }
 
-    this.#boardPoints.forEach((point) => {
+  #renderNoPoints() {
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#filterType,
+    });
+    render(this.#noPointsComponent, this.#boardComponent.element);
+  }
+
+  #renderSort() {
+    render(this.#sortComponent, this.#boardComponent.element);
+  }
+
+  #renderPointList() {
+    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderPoints(this.#boardPoints);
+  }
+
+  #renderPoints(points) {
+    points.forEach((point) => {
       this.#renderPoint(point);
     });
   }
@@ -89,12 +109,5 @@ export default class BoardPresenter {
     }
 
     render(pointComponent, this.#pointListComponent.element);
-  }
-
-  #renderNoPoints() {
-    const noPointsComponent = new NoPointsView({
-      filterType: this.#filterType,
-    });
-    render(noPointsComponent, this.#boardComponent.element);
   }
 }
