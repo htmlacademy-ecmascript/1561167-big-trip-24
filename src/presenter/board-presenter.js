@@ -1,5 +1,6 @@
 import { DEFAULT_FILTER_TYPE } from '../const';
 import { render } from '../framework/render';
+import { updateItem } from '../utils/common';
 import BoardView from '../view/board-view/board-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
@@ -20,6 +21,8 @@ export default class BoardPresenter {
   #destinations = [];
 
   #filterType = DEFAULT_FILTER_TYPE;
+
+  #pointPresenters = new Map();
 
   constructor({ boardContainer, tripModel }) {
     this.#boardContainer = boardContainer;
@@ -62,6 +65,11 @@ export default class BoardPresenter {
     this.#renderPoints(this.#boardPoints);
   }
 
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
   #renderPoints(points) {
     points.forEach((point) => {
       this.#renderPoint(point);
@@ -76,5 +84,11 @@ export default class BoardPresenter {
     });
 
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
 }
