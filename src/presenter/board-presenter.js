@@ -81,6 +81,7 @@ export default class BoardPresenter {
       pointListContainer: this.#pointListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
+      onDateChange: this.#handlePointChange,
     });
 
     pointPresenter.init(point);
