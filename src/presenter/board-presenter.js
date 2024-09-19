@@ -1,11 +1,10 @@
 import { DEFAULT_FILTER_TYPE } from '../const';
-import { render, replace } from '../framework/render';
+import { render } from '../framework/render';
 import BoardView from '../view/board-view/board-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
-import PointEditView from '../view/point-edit-view/point-edit-view';
 import PointListView from '../view/point-list-view/point-list-view';
-import PointView from '../view/point-view/point-view';
 import SortView from '../view/sort-view/sort-view';
+import PointPresenter from './point-presenter';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -70,44 +69,12 @@ export default class BoardPresenter {
   }
 
   #renderPoint(point) {
-    const escapeKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      }
-    };
-    const pointComponent = new PointView({
-      point,
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#pointListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEditClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escapeKeyDownHandler);
-      },
-    });
-    const pointEditComponent = new PointEditView({
-      point,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      },
-      onCloseFormClick: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      },
     });
 
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    render(pointComponent, this.#pointListComponent.element);
+    pointPresenter.init(point);
   }
 }
