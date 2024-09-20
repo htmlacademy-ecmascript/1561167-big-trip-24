@@ -54,8 +54,8 @@ const DEFAULT_SORTING_TYPE = SortType.DAY;
 const ACCEPTABLE_SORTING = [SortType.DAY, SortType.TIME, SortType.PRICE];
 
 const ViewingMode = {
-  DEFAULT: 'default',
-  EDITING: 'editing',
+  CARD: 'card',
+  FORM: 'form',
 };
 
 const BLANK_POINT = {

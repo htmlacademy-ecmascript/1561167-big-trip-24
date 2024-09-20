@@ -16,7 +16,7 @@ export default class PointPresenter {
   #handleDataChange = null;
   #handleModeChange = null;
 
-  #mode = ViewingMode.DEFAULT;
+  #mode = ViewingMode.CARD;
 
   constructor({
     pointListContainer,
@@ -59,11 +59,11 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#mode === ViewingMode.DEFAULT) {
+    if (this.#mode === ViewingMode.CARD) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#mode === ViewingMode.EDITING) {
+    if (this.#mode === ViewingMode.FORM) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
@@ -77,7 +77,7 @@ export default class PointPresenter {
   }
 
   resetViewingMode() {
-    if (this.#mode !== ViewingMode.DEFAULT) {
+    if (this.#mode !== ViewingMode.CARD) {
       this.#replaceFormToCard();
     }
   }
@@ -85,14 +85,14 @@ export default class PointPresenter {
   #replaceFormToCard() {
     replace(this.#pointComponent, this.#pointEditComponent);
     document.removeEventListener('keydown', this.#escapeKeyDownHandler);
-    this.#mode = ViewingMode.DEFAULT;
+    this.#mode = ViewingMode.CARD;
   }
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escapeKeyDownHandler);
     this.#handleModeChange();
-    this.#mode = ViewingMode.EDITING;
+    this.#mode = ViewingMode.FORM;
   }
 
   #escapeKeyDownHandler = (evt) => {
