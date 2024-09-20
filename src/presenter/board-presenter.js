@@ -82,6 +82,7 @@ export default class BoardPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onDateChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange,
     });
 
     pointPresenter.init(point);
@@ -91,5 +92,9 @@ export default class BoardPresenter {
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
   };
 }
