@@ -1,4 +1,4 @@
-const POINT_COUNT = 5;
+const POINT_COUNT = 10;
 
 const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',
@@ -53,6 +53,11 @@ const DEFAULT_SORTING_TYPE = SortType.DAY;
 
 const ACCEPTABLE_SORTING = [SortType.DAY, SortType.TIME, SortType.PRICE];
 
+const ViewingMode = {
+  CARD: 'card',
+  FORM: 'form',
+};
+
 const BLANK_POINT = {
   id: '',
   basePrice: 0,
@@ -76,4 +81,5 @@ export {
   ACCEPTABLE_SORTING,
   BLANK_POINT,
   TypeTextMessage,
+  ViewingMode,
 };

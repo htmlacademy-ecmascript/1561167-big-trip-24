@@ -1,24 +1,28 @@
 import { DEFAULT_FILTER_TYPE } from '../const';
-import { render, replace } from '../framework/render';
+import { render } from '../framework/render';
+import { updateItem } from '../utils/common';
 import BoardView from '../view/board-view/board-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
-import PointEditView from '../view/point-edit-view/point-edit-view';
 import PointListView from '../view/point-list-view/point-list-view';
-import PointView from '../view/point-view/point-view';
 import SortView from '../view/sort-view/sort-view';
+import PointPresenter from './point-presenter';
 
 export default class BoardPresenter {
   #boardContainer = null;
-  #tripModel = null;
 
   #boardComponent = new BoardView();
   #pointListComponent = new PointListView();
+  #noPointsComponent = null;
+  #sortComponent = new SortView();
 
+  #tripModel = null;
   #boardPoints = [];
   #offers = [];
   #destinations = [];
 
   #filterType = DEFAULT_FILTER_TYPE;
+
+  #pointPresenters = new Map();
 
   constructor({ boardContainer, tripModel }) {
     this.#boardContainer = boardContainer;
@@ -41,60 +45,56 @@ export default class BoardPresenter {
       return;
     }
 
-    render(new SortView(), this.#boardComponent.element);
-    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderSort();
+    this.#renderPointList();
+  }
 
-    this.#boardPoints.forEach((point) => {
+  #renderNoPoints() {
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#filterType,
+    });
+    render(this.#noPointsComponent, this.#boardComponent.element);
+  }
+
+  #renderSort() {
+    render(this.#sortComponent, this.#boardComponent.element);
+  }
+
+  #renderPointList() {
+    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderPoints(this.#boardPoints);
+  }
+
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #renderPoints(points) {
+    points.forEach((point) => {
       this.#renderPoint(point);
     });
   }
 
   #renderPoint(point) {
-    const escapeKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      }
-    };
-    const pointComponent = new PointView({
-      point,
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#pointListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEditClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escapeKeyDownHandler);
-      },
-    });
-    const pointEditComponent = new PointEditView({
-      point,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      },
-      onCloseFormClick: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escapeKeyDownHandler);
-      },
+      onDateChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange,
     });
 
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    render(pointComponent, this.#pointListComponent.element);
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderNoPoints() {
-    const noPointsComponent = new NoPointsView({
-      filterType: this.#filterType,
-    });
-    render(noPointsComponent, this.#boardComponent.element);
-  }
+  #handlePointChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
+  };
 }
