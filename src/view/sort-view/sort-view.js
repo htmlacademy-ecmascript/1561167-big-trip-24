@@ -3,21 +3,21 @@ import { createSortTemplate } from './template';
 
 export default class SortView extends AbstractView {
   #currentSortingType = null;
-  #handleSortingTypeChanging = null;
+  #handleSortingTypeChange = null;
 
-  constructor({ currentSortingType, onSortingTypeChanging }) {
+  constructor({ currentSortingType, onSortingTypeChange }) {
     super();
     this.#currentSortingType = currentSortingType;
-    this.#handleSortingTypeChanging = onSortingTypeChanging;
+    this.#handleSortingTypeChange = onSortingTypeChange;
 
-    this.element.addEventListener('change', this.#sortingTypeChangingHandler);
+    this.element.addEventListener('change', this.#sortingTypeChangeHandler);
   }
 
   get template() {
     return createSortTemplate(this.#currentSortingType);
   }
 
-  #sortingTypeChangingHandler = (evt) => {
+  #sortingTypeChangeHandler = (evt) => {
     const sortingType = evt.target.dataset.sortingType;
 
     evt.preventDefault();
@@ -26,6 +26,6 @@ export default class SortView extends AbstractView {
       return;
     }
 
-    this.#handleSortingTypeChanging(sortingType);
+    this.#handleSortingTypeChange(sortingType);
   };
 }

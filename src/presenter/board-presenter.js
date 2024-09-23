@@ -71,7 +71,7 @@ export default class BoardPresenter {
   #renderSort() {
     this.#sortComponent = new SortView({
       currentSortingType: this.#currentSortigType,
-      onSortingTypeChanging: this.#handleSortingTypeChanging,
+      onSortingTypeChange: this.#handleSortingTypeChange,
     });
     render(this.#sortComponent, this.#boardComponent.element);
   }
@@ -97,7 +97,7 @@ export default class BoardPresenter {
       pointListContainer: this.#pointListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
-      onDateChange: this.#handlePointChange,
+      onDataChange: this.#handlePointChange,
       onModeChange: this.#handleModeChange,
     });
 
@@ -133,7 +133,7 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
   };
 
-  #handleSortingTypeChanging = (sortingType) => {
+  #handleSortingTypeChange = (sortingType) => {
     if (sortingType === this.#currentSortigType) {
       return;
     }

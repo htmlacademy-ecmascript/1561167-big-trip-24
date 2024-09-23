@@ -22,13 +22,13 @@ export default class PointPresenter {
     pointListContainer,
     destinations,
     offers,
-    onDateChange,
+    onDataChange,
     onModeChange,
   }) {
     this.#pointListContainer = pointListContainer;
     this.#destinations = destinations;
     this.#offers = offers;
-    this.#handleDataChange = onDateChange;
+    this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
 

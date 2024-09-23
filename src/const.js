@@ -51,7 +51,7 @@ const SortingType = {
 
 const DEFAULT_SORTING_TYPE = SortingType.DAY;
 
-const ALLOWED_SORTING_TYPE = [
+const ALLOWED_SORTING_TYPES = [
   SortingType.DAY,
   SortingType.TIME,
   SortingType.PRICE,
@@ -82,7 +82,7 @@ export {
   DEFAULT_FILTER_TYPE,
   SortingType,
   DEFAULT_SORTING_TYPE,
-  ALLOWED_SORTING_TYPE,
+  ALLOWED_SORTING_TYPES,
   BLANK_POINT,
   TypeTextMessage,
   ViewingMode,

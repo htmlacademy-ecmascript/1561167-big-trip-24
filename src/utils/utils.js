@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ALLOWED_SORTING_TYPE, DateFormat } from '../const';
+import { ALLOWED_SORTING_TYPES, DateFormat } from '../const';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -95,7 +95,7 @@ const isPointPresent = ({ dateFrom, dateTo }) =>
 const isPointPast = ({ dateTo }) => dayjs().isAfter(dateTo);
 
 const isAllowedSortingType = (sortingType) =>
-  ALLOWED_SORTING_TYPE.includes(sortingType);
+  ALLOWED_SORTING_TYPES.includes(sortingType);
 
 const compareByDuration = (pointA, pointB) => {
   const getDurationPoint = (dateFrom, dateTo) =>
