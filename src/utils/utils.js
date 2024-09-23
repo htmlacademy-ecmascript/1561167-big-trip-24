@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { DateFormat } from '../const';
+import { ALLOWED_SORTING_TYPES, DateFormat } from '../const';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -94,6 +94,29 @@ const isPointPresent = ({ dateFrom, dateTo }) =>
 
 const isPointPast = ({ dateTo }) => dayjs().isAfter(dateTo);
 
+const isAllowedSortingType = (sortingType) =>
+  ALLOWED_SORTING_TYPES.includes(sortingType);
+
+const compareByDuration = (pointA, pointB) => {
+  const getDurationPoint = (dateFrom, dateTo) =>
+    dayjs(dateTo).diff(dayjs(dateFrom));
+  const durrationPointA = getDurationPoint(pointA.dateFrom, pointA.dateTo);
+  const durrationPointB = getDurationPoint(pointB.dateFrom, pointB.dateTo);
+
+  return durrationPointB - durrationPointA;
+};
+
+const compareByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+
+const compareByDate = ({ dateFrom: datePointA }, { dateFrom: datePointB }) => {
+  if (dayjs(datePointA).isBefore(datePointB)) {
+    return -1;
+  } else if (dayjs(datePointA).isAfter(datePointB)) {
+    return 1;
+  }
+  return 0;
+};
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
@@ -108,4 +131,8 @@ export {
   isPointFuture,
   isPointPresent,
   isPointPast,
+  compareByDuration,
+  isAllowedSortingType,
+  compareByPrice,
+  compareByDate,
 };

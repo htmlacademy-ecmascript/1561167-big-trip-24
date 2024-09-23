@@ -41,7 +41,7 @@ const TypeTextMessage = {
   [FilterType.PAST]: 'There are no past events now',
 };
 
-const SortType = {
+const SortingType = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -49,9 +49,13 @@ const SortType = {
   OFFERS: 'offers',
 };
 
-const DEFAULT_SORTING_TYPE = SortType.DAY;
+const DEFAULT_SORTING_TYPE = SortingType.DAY;
 
-const ACCEPTABLE_SORTING = [SortType.DAY, SortType.TIME, SortType.PRICE];
+const ALLOWED_SORTING_TYPES = [
+  SortingType.DAY,
+  SortingType.TIME,
+  SortingType.PRICE,
+];
 
 const ViewingMode = {
   CARD: 'card',
@@ -76,9 +80,9 @@ export {
   DEFAULT_POINT_TYPE,
   FilterType,
   DEFAULT_FILTER_TYPE,
-  SortType,
+  SortingType,
   DEFAULT_SORTING_TYPE,
-  ACCEPTABLE_SORTING,
+  ALLOWED_SORTING_TYPES,
   BLANK_POINT,
   TypeTextMessage,
   ViewingMode,
