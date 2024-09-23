@@ -1,6 +1,15 @@
-import { DEFAULT_FILTER_TYPE } from '../const';
+import {
+  DEFAULT_FILTER_TYPE,
+  DEFAULT_SORTING_TYPE,
+  SortingType,
+} from '../const';
 import { render } from '../framework/render';
 import { updateItem } from '../utils/common';
+import {
+  compareByDate,
+  compareByDuration,
+  compareByPrice,
+} from '../utils/utils';
 import BoardView from '../view/board-view/board-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
@@ -13,14 +22,16 @@ export default class BoardPresenter {
   #boardComponent = new BoardView();
   #pointListComponent = new PointListView();
   #noPointsComponent = null;
-  #sortComponent = new SortView();
+  #sortComponent = null;
 
   #tripModel = null;
   #boardPoints = [];
+  #sourcedBoardPoints = [];
   #offers = [];
   #destinations = [];
 
   #filterType = DEFAULT_FILTER_TYPE;
+  #currentSortigType = DEFAULT_SORTING_TYPE;
 
   #pointPresenters = new Map();
 
@@ -30,7 +41,8 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#tripModel.points];
+    this.#boardPoints = [...this.#tripModel.points].sort(compareByDate);
+    this.#sourcedBoardPoints = [...this.#boardPoints];
     this.#offers = this.#tripModel.offers;
     this.#destinations = this.#tripModel.destinations;
 
@@ -57,6 +69,10 @@ export default class BoardPresenter {
   }
 
   #renderSort() {
+    this.#sortComponent = new SortView({
+      currentSortingType: this.#currentSortigType,
+      onSortingTypeChanging: this.#handleSortingTypeChanging,
+    });
     render(this.#sortComponent, this.#boardComponent.element);
   }
 
@@ -89,12 +105,41 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
+  #sortPoints(sortingType) {
+    switch (sortingType) {
+      case SortingType.TIME:
+        this.#boardPoints.sort(compareByDuration);
+        break;
+      case SortingType.PRICE:
+        this.#boardPoints.sort(compareByPrice);
+        break;
+      default:
+        this.#boardPoints = [...this.#sourcedBoardPoints];
+    }
+
+    this.#currentSortigType = sortingType;
+  }
+
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#sourcedBoardPoints = updateItem(
+      this.#sourcedBoardPoints,
+      updatedPoint
+    );
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
+  };
+
+  #handleSortingTypeChanging = (sortingType) => {
+    if (sortingType === this.#currentSortigType) {
+      return;
+    }
+
+    this.#sortPoints(sortingType);
+    this.#clearPointList();
+    this.#renderPointList();
   };
 }
