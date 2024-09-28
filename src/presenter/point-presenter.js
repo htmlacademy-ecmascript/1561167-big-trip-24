@@ -78,6 +78,7 @@ export default class PointPresenter {
 
   resetViewingMode() {
     if (this.#mode !== ViewingMode.CARD) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
