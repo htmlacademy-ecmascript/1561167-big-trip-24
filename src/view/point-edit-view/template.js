@@ -52,9 +52,9 @@ const createPointTypeListTemplate = (currentPointType) => {
 
 const createOffersItemTemplate = ({
   availableOffer: { id, title, price },
-  idSelectedOffers,
+  selectedOffersIDs,
 }) => {
-  const isChecked = idSelectedOffers.includes(id);
+  const isChecked = selectedOffersIDs.includes(id);
 
   return `
     <div class="event__offer-selector">
@@ -75,22 +75,22 @@ const createOffersItemTemplate = ({
 };
 
 const createAvailableOffersTemplate = ({
-  point: { type, offers: idOffers },
+  state: { type, offers: offersIDs, isShowOffers },
   offers,
 }) => {
+  if (!isShowOffers) {
+    return '';
+  }
+
   const availableOffers = getOffersByType({ offers, type });
   const offersItemTemplate = availableOffers
     .map((availableOffer) =>
       createOffersItemTemplate({
         availableOffer,
-        idSelectedOffers: idOffers,
+        selectedOffersIDs: offersIDs,
       })
     )
     .join('');
-
-  if (!offers.length || !availableOffers.length) {
-    return '';
-  }
 
   return `
     <section class="event__section  event__section--offers">
@@ -121,42 +121,68 @@ const createPhotosTapeTemplate = (pictures) => {
   `;
 };
 
-const createDestinationDetailsTemplate = ({ point, destinations }) => {
-  const destination = getDestinationById({
-    destinations,
-    destinationId: point.destination,
-  });
-  const photosTapeTemplate = createPhotosTapeTemplate(destination?.pictures);
-
-  if (!destination) {
+const createDestinationDescriptionTemplate = (destination) => {
+  if (destination.description.length === 0) {
     return '';
   }
+
+  return `
+    <p class="event__destination-description">
+      ${destination.description}
+    </p>
+  `;
+};
+
+const createDestinationDetailsTemplate = ({ state, destinations }) => {
+  if (!state.isShowDestination) {
+    return '';
+  }
+  // console.log(
+  //   'createDestinationDetailsTemplate  state.isShowDestination:',
+  //   state.isShowDestination
+  // );
+
+  const destination = getDestinationById({
+    destinations,
+    destinationId: state.destination,
+  });
+  const photosTapeTemplate = createPhotosTapeTemplate(destination?.pictures);
 
   return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">
         ${destination.name}
       </h3>
-      <p class="event__destination-description">
-        ${destination.description}
-      </p>
+      ${createDestinationDescriptionTemplate(destination)}
       ${photosTapeTemplate}
     </section>`;
 };
 
-const createPointDetailsTemplate = ({ point, destinations, offers }) => {
+const createPointDetailsTemplate = ({ state, destinations, offers }) => {
+  if (!state.isShowOffers && !state.isShowDestination) {
+    return '';
+  }
+
   const offersDetailsTemplate = createAvailableOffersTemplate({
-    point,
+    state,
     offers,
   });
   const destinationDetailsTemplate = createDestinationDetailsTemplate({
-    point,
+    state,
     destinations,
   });
+  // console.log(
+  //   'createPointDetailsTemplate  offersDetailsTemplate:',
+  //   offersDetailsTemplate
+  // );
+  // console.log(
+  //   'createPointDetailsTemplate  destinationDetailsTemplate:',
+  //   destinationDetailsTemplate
+  // );
 
-  if (!offersDetailsTemplate.length && !destinationDetailsTemplate.length) {
-    return '';
-  }
+  // if (!offersDetailsTemplate.length && !destinationDetailsTemplate.length) {
+  //   return '';
+  // }
 
   return `
     <section class="event__details">
@@ -167,7 +193,7 @@ const createPointDetailsTemplate = ({ point, destinations, offers }) => {
 };
 
 const createPointEditTemplate = ({
-  point,
+  state,
   destinations,
   offers,
   isNewPoint,
@@ -178,7 +204,7 @@ const createPointEditTemplate = ({
     dateTo,
     basePrice,
     destination: destinationId,
-  } = point;
+  } = state;
   const destinationTitle =
     getDestinationById({
       destinations,
@@ -248,7 +274,7 @@ const createPointEditTemplate = ({
           </button>
           ${rollupButtonTemplate}
         </header>
-        ${createPointDetailsTemplate({ point, destinations, offers })}
+        ${createPointDetailsTemplate({ state, destinations, offers })}
       </form>
     </li>
   `;

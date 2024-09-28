@@ -1,7 +1,7 @@
 import { loadDestinations, loadOffers, loadPoints } from '../mock/mock';
 
 export default class TripModel {
-  #points = loadPoints(true);
+  #points = loadPoints();
   #destinations = loadDestinations();
   #offers = loadOffers();
 

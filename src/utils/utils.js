@@ -70,8 +70,22 @@ const getLastWord = (value) => {
 const getDestinationById = ({ destinations, destinationId }) =>
   destinations.find((destination) => destination.id === destinationId);
 
+const getDestinationIdByName = ({ nameDestination, destinations }) =>
+  destinations.find((destination) => destination.name === nameDestination)
+    ?.id ?? '';
+
 const getDestinationListNames = (destinations) =>
   destinations.map(({ name }) => name);
+
+const hasDetailsDestination = ({ destinations, destinationId }) => {
+  const { description = '', pictures = [] } =
+    getDestinationById({
+      destinationId,
+      destinations,
+    }) ?? {};
+
+  return description.length !== 0 || pictures.length !== 0;
+};
 
 const getOffersByType = ({ type, offers }) =>
   offers.find((offer) => offer.type === type).offers;
@@ -86,6 +100,9 @@ const getSelectedOffersByType = ({ point, offers }) => {
 
   return availableOffers.filter((offer) => selectedOffers.includes(offer.id));
 };
+
+const hasOffersByType = ({ type, offers }) =>
+  getOffersByType({ type, offers }).length !== 0;
 
 const isPointFuture = ({ dateFrom }) => dayjs().isBefore(dateFrom);
 
@@ -123,7 +140,10 @@ export {
   humanizeDurationEvent,
   shuffle,
   getDestinationById,
+  getDestinationIdByName,
   getOffersByType,
+  hasOffersByType,
+  hasDetailsDestination,
   getSelectedOffersByType,
   getUppercaseFirstLetter,
   getDestinationListNames,
