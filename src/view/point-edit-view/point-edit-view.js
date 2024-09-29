@@ -4,6 +4,7 @@ import {
   getDestinationIdByName,
   hasDetailsDestination,
   hasOffersByType,
+  isDigitsOnly,
 } from '../../utils/utils.js';
 import { createPointEditTemplate } from './template.js';
 import flatpickr from 'flatpickr';
@@ -170,9 +171,15 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #priceInputHandler = (evt) => {
-    const targetPrice = evt.target.value;
+    const targetValue = evt.target.value;
 
-    this._setState({ basePrice: targetPrice });
+    if (!isDigitsOnly(targetValue)) {
+      this._setState({ basePrice: this._state.prevValidValue });
+      evt.target.value = this._state.prevValidValue.toString();
+      return;
+    }
+
+    this._setState({ basePrice: +targetValue, prevValidValue: +targetValue });
   };
 
   static parsePointToState({ point, offers, destinations }) {
@@ -183,11 +190,13 @@ export default class PointEditView extends AbstractStatefulView {
         destinationId: point.destination,
         destinations,
       });
+    const prevValidValue = point.basePrice;
 
     return {
       ...point,
       isShowOffers,
       isShowDestination,
+      prevValidValue,
     };
   }
 
@@ -200,6 +209,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     delete point.isShowOffers;
     delete point.isShowDestinations;
+    delete point.prevValidValue;
 
     return point;
   }

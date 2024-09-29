@@ -48,17 +48,6 @@ const humanizeDurationEvent = (dateFrom, dateTo) => {
   return daysFormat + hoursFormat + minutesFormat;
 };
 
-const shuffle = (items) => {
-  const mixedItems = [...items];
-
-  for (let i = mixedItems.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [mixedItems[i], mixedItems[j]] = [mixedItems[j], mixedItems[i]];
-  }
-
-  return mixedItems;
-};
-
 const getUppercaseFirstLetter = (word) =>
   word.at(0).toUpperCase() + word.slice(1);
 
@@ -134,11 +123,12 @@ const compareByDate = ({ dateFrom: datePointA }, { dateFrom: datePointB }) => {
   return 0;
 };
 
+const isDigitsOnly = (value) => /^\d+$/.test(value);
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
   humanizeDurationEvent,
-  shuffle,
   getDestinationById,
   getDestinationIdByName,
   getOffersByType,
@@ -155,4 +145,5 @@ export {
   isAllowedSortingType,
   compareByPrice,
   compareByDate,
+  isDigitsOnly,
 };

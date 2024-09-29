@@ -1,5 +1,5 @@
 import { POINT_COUNT } from '../const';
-import { shuffle } from '../utils/utils';
+import { shuffle } from '../utils/common';
 
 const mockPoints = [
   {
@@ -8,8 +8,7 @@ const mockPoints = [
     basePrice: 1546,
     dateFrom: '2024-08-21T18:41:09.384Z',
     dateTo: '2024-08-23T18:41:09.384Z',
-    // destination: 'f9d2304b-588b-43a2-9b45-e42ed44c2bf1',
-    destination: 'fa8177a6-22b7-48a7-a7aa-0dc31998d3f8',
+    destination: 'f9d2304b-588b-43a2-9b45-e42ed44c2bf1',
     isFavorite: true,
     offers: [],
     type: 'bus',
