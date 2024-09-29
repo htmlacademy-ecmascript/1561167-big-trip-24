@@ -126,12 +126,18 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #dateFromCloseHandler = ([userDate]) => {
-    this._setState({ dateFrom: userDate });
+    this._setState({
+      dateFrom: userDate,
+      isDisabledSubmit: userDate === undefined,
+    });
     this.#dateToPicker.set('minDate', this._state.dateFrom);
   };
 
   #dateToCloseHandler = ([userDate]) => {
-    this._setState({ dateTo: userDate });
+    this._setState({
+      dateTo: userDate,
+      isDisabledSubmit: userDate === undefined,
+    });
     this.#dateFromPicker.set('maxDate', this._state.dateTo);
   };
 
@@ -167,6 +173,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       destination,
       isShowDestination: destination.length !== 0,
+      isDisabledSubmit: destination.length === 0,
     });
   };
 
@@ -174,12 +181,17 @@ export default class PointEditView extends AbstractStatefulView {
     const targetValue = evt.target.value;
 
     if (!isDigitsOnly(targetValue)) {
-      this._setState({ basePrice: this._state.prevValidValue });
+      this._setState({
+        basePrice: this._state.prevValidValue,
+      });
       evt.target.value = this._state.prevValidValue.toString();
       return;
     }
 
-    this._setState({ basePrice: +targetValue, prevValidValue: +targetValue });
+    this._setState({
+      basePrice: +targetValue,
+      prevValidValue: +targetValue,
+    });
   };
 
   static parsePointToState({ point, offers, destinations }) {
@@ -191,12 +203,17 @@ export default class PointEditView extends AbstractStatefulView {
         destinations,
       });
     const prevValidValue = point.basePrice;
+    const isDisabledSubmit =
+      point.destination.length === 0 ||
+      point.dateFrom === null ||
+      point.dateTo === null;
 
     return {
       ...point,
       isShowOffers,
       isShowDestination,
       prevValidValue,
+      isDisabledSubmit,
     };
   }
 
@@ -210,6 +227,7 @@ export default class PointEditView extends AbstractStatefulView {
     delete point.isShowOffers;
     delete point.isShowDestinations;
     delete point.prevValidValue;
+    delete point.isDisabledSubmit;
 
     return point;
   }

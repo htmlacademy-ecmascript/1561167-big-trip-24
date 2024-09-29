@@ -188,6 +188,7 @@ const createPointEditTemplate = ({
     dateTo,
     basePrice,
     destination: destinationId,
+    isDisabledSubmit,
   } = state;
   const destinationTitle =
     getDestinationById({
@@ -252,7 +253,12 @@ const createPointEditTemplate = ({
               name="event-price"
               value="${basePrice}">
           </div>
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+          <button
+            class="event__save-btn  btn  btn--blue"
+            type="submit"
+            ${isDisabledSubmit ? 'disabled' : ''}
+            >Save
+          </button>
           <button class="event__reset-btn" type="reset">
             ${isNewPoint ? 'Cancel' : 'Delete'}
           </button>
