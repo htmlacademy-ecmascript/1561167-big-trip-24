@@ -6,6 +6,8 @@ import {
   hasOffersByType,
 } from '../../utils/utils.js';
 import { createPointEditTemplate } from './template.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 export default class PointEditView extends AbstractStatefulView {
   #initialPoint = null;
@@ -15,6 +17,9 @@ export default class PointEditView extends AbstractStatefulView {
 
   #handleFormSubmit = null;
   #handleCloseFormClick = null;
+
+  #dateFromPicker = null;
+  #dateToPicker = null;
 
   constructor({
     point = BLANK_POINT,
@@ -63,7 +68,22 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
+    this.#initDatePicker();
   }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#dateFromPicker !== null) {
+      this.#dateFromPicker.destroy();
+      this.#dateFromPicker = null;
+    }
+
+    if (this.#dateToPicker !== null) {
+      this.#dateToPicker.destroy();
+      this.#dateToPicker = null;
+    }
+  };
 
   reset(point) {
     this.updateElement(
@@ -74,6 +94,45 @@ export default class PointEditView extends AbstractStatefulView {
       })
     );
   }
+
+  #initDatePicker = () => {
+    const KEY = 'time_24hr';
+    const commonParameter = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: { firstDayOfWeek: 1 },
+      [KEY]: true,
+    };
+
+    this.#dateFromPicker = flatpickr(
+      this.element.querySelector('input[name="event-start-time"]'),
+      {
+        ...commonParameter,
+        defaultDate: this._state.dateFrom,
+        onClose: this.#dateFromCloseHandler,
+        maxDate: this._state.dateTo,
+      }
+    );
+    this.#dateToPicker = flatpickr(
+      this.element.querySelector('input[name="event-end-time"]'),
+      {
+        ...commonParameter,
+        defaultDate: this._state.dateTo,
+        onClose: this.#dateToCloseHandler,
+        minDate: this._state.dateFrom,
+      }
+    );
+  };
+
+  #dateFromCloseHandler = ([userDate]) => {
+    this._setState({ dateFrom: userDate });
+    this.#dateToPicker.set('minDate', this._state.dateFrom);
+  };
+
+  #dateToCloseHandler = ([userDate]) => {
+    this._setState({ dateTo: userDate });
+    this.#dateFromPicker.set('maxDate', this._state.dateTo);
+  };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
