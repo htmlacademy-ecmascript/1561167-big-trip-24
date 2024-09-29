@@ -137,10 +137,6 @@ const createDestinationDetailsTemplate = ({ state, destinations }) => {
   if (!state.isShowDestination) {
     return '';
   }
-  // console.log(
-  //   'createDestinationDetailsTemplate  state.isShowDestination:',
-  //   state.isShowDestination
-  // );
 
   const destination = getDestinationById({
     destinations,
@@ -171,18 +167,6 @@ const createPointDetailsTemplate = ({ state, destinations, offers }) => {
     state,
     destinations,
   });
-  // console.log(
-  //   'createPointDetailsTemplate  offersDetailsTemplate:',
-  //   offersDetailsTemplate
-  // );
-  // console.log(
-  //   'createPointDetailsTemplate  destinationDetailsTemplate:',
-  //   destinationDetailsTemplate
-  // );
-
-  // if (!offersDetailsTemplate.length && !destinationDetailsTemplate.length) {
-  //   return '';
-  // }
 
   return `
     <section class="event__details">
