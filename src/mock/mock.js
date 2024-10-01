@@ -1,5 +1,5 @@
 import { POINT_COUNT } from '../const';
-import { shuffle } from '../utils/utils';
+import { adaptPointToClient, shuffle } from '../utils/common';
 
 const mockPoints = [
   {
@@ -426,7 +426,8 @@ const mockDestinations = [
   },
   {
     id: 'fa8177a6-22b7-48a7-a7aa-0dc31998d3f8',
-    description: 'Rome - for those who value comfort and coziness',
+    // description: 'Rome - for those who value comfort and coziness',
+    description: '',
     name: 'Rome',
     pictures: [],
   },
@@ -676,10 +677,10 @@ const loadPoints = (isMixUp = false) => {
   const pointCount = Math.min(POINT_COUNT, mockPoints.length);
 
   if (!isMixUp) {
-    return mockPoints.slice(0, pointCount);
+    return mockPoints.slice(0, pointCount).map(adaptPointToClient);
   }
 
-  return shuffle(mockPoints).slice(0, pointCount);
+  return shuffle(mockPoints).slice(0, pointCount).map(adaptPointToClient);
 };
 const loadDestinations = () => mockDestinations;
 const loadOffers = () => mockOffers;

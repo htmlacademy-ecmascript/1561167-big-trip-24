@@ -48,17 +48,6 @@ const humanizeDurationEvent = (dateFrom, dateTo) => {
   return daysFormat + hoursFormat + minutesFormat;
 };
 
-const shuffle = (items) => {
-  const mixedItems = [...items];
-
-  for (let i = mixedItems.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [mixedItems[i], mixedItems[j]] = [mixedItems[j], mixedItems[i]];
-  }
-
-  return mixedItems;
-};
-
 const getUppercaseFirstLetter = (word) =>
   word.at(0).toUpperCase() + word.slice(1);
 
@@ -70,8 +59,22 @@ const getLastWord = (value) => {
 const getDestinationById = ({ destinations, destinationId }) =>
   destinations.find((destination) => destination.id === destinationId);
 
+const getDestinationIdByName = ({ nameDestination, destinations }) =>
+  destinations.find((destination) => destination.name === nameDestination)
+    ?.id ?? '';
+
 const getDestinationListNames = (destinations) =>
   destinations.map(({ name }) => name);
+
+const hasDetailsDestination = ({ destinations, destinationId }) => {
+  const { description = '', pictures = [] } =
+    getDestinationById({
+      destinationId,
+      destinations,
+    }) ?? {};
+
+  return description.length !== 0 || pictures.length !== 0;
+};
 
 const getOffersByType = ({ type, offers }) =>
   offers.find((offer) => offer.type === type).offers;
@@ -86,6 +89,9 @@ const getSelectedOffersByType = ({ point, offers }) => {
 
   return availableOffers.filter((offer) => selectedOffers.includes(offer.id));
 };
+
+const hasOffersByType = ({ type, offers }) =>
+  getOffersByType({ type, offers }).length !== 0;
 
 const isPointFuture = ({ dateFrom }) => dayjs().isBefore(dateFrom);
 
@@ -117,13 +123,17 @@ const compareByDate = ({ dateFrom: datePointA }, { dateFrom: datePointB }) => {
   return 0;
 };
 
+const isDigitsOnly = (value) => /^\d+$/.test(value);
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
   humanizeDurationEvent,
-  shuffle,
   getDestinationById,
+  getDestinationIdByName,
   getOffersByType,
+  hasOffersByType,
+  hasDetailsDestination,
   getSelectedOffersByType,
   getUppercaseFirstLetter,
   getDestinationListNames,
@@ -135,4 +145,5 @@ export {
   isAllowedSortingType,
   compareByPrice,
   compareByDate,
+  isDigitsOnly,
 };

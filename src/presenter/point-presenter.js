@@ -78,6 +78,7 @@ export default class PointPresenter {
 
   resetViewingMode() {
     if (this.#mode !== ViewingMode.CARD) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -98,8 +99,8 @@ export default class PointPresenter {
   #escapeKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#escapeKeyDownHandler);
     }
   };
 
@@ -109,6 +110,7 @@ export default class PointPresenter {
   };
 
   #handleCloseFormClick = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   };
 

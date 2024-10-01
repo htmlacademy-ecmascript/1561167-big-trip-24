@@ -65,8 +65,8 @@ const ViewingMode = {
 const BLANK_POINT = {
   id: '',
   basePrice: 0,
-  dateFrom: '',
-  dateTo: '',
+  dateFrom: null,
+  dateTo: null,
   destination: '',
   isFavorite: false,
   offers: [],
