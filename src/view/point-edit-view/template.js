@@ -232,16 +232,30 @@ const createPointEditTemplate = ({
               id="event-destination-1"
               type="text"
               name="event-destination"
-              value="${destinationTitle}" list="destination-list-1">
+              value="${destinationTitle}"
+              list="destination-list-1"
+              data-monitored-field="">
             ${createDestinationListNamesTemplate(destinations)}
           </div>
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFromPointTemplate}">
+            <input
+              class="event__input  event__input--time"
+              id="event-start-time-1"
+              type="text"
+              name="event-start-time"
+              value="${dateFromPointTemplate}"
+              data-monitored-field="">
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateToPointTemplate}">
+            <input
+            class="event__input  event__input--time"
+            id="event-end-time-1"
+            type="text"
+            name="event-end-time"
+            value="${dateToPointTemplate}"
+            data-monitored-field="">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -249,9 +263,13 @@ const createPointEditTemplate = ({
               <span class="visually-hidden">Price</span>
               €
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text"
+            <input
+              class="event__input  event__input--price"
+              id="event-price-1"
+              type="number" min="1" max="10000" step="1"
               name="event-price"
-              value="${basePrice}">
+              value="${basePrice}"
+              required>
           </div>
           <button
             class="event__save-btn  btn  btn--blue"

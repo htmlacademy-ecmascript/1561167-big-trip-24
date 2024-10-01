@@ -426,8 +426,7 @@ const mockDestinations = [
   },
   {
     id: 'fa8177a6-22b7-48a7-a7aa-0dc31998d3f8',
-    // description: 'Rome - for those who value comfort and coziness',
-    description: '',
+    description: 'Rome - for those who value comfort and coziness',
     name: 'Rome',
     pictures: [],
   },

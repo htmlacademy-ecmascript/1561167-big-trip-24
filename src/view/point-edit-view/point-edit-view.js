@@ -4,7 +4,6 @@ import {
   getDestinationIdByName,
   hasDetailsDestination,
   hasOffersByType,
-  isDigitsOnly,
 } from '../../utils/utils.js';
 import { createPointEditTemplate } from './template.js';
 import flatpickr from 'flatpickr';
@@ -96,6 +95,14 @@ export default class PointEditView extends AbstractStatefulView {
     );
   }
 
+  #checkFields() {
+    const elements = [
+      ...this.element.querySelectorAll('input[data-monitored-field=""]'),
+    ];
+
+    return elements.some((element) => element.value.length === 0);
+  }
+
   #initDatePicker = () => {
     const KEY = 'time_24hr';
     const commonParameter = {
@@ -126,19 +133,19 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #dateFromCloseHandler = ([userDate]) => {
-    this._setState({
-      dateFrom: userDate,
-      isDisabledSubmit: userDate === undefined,
-    });
     this.#dateToPicker.set('minDate', this._state.dateFrom);
+    this.updateElement({
+      dateFrom: userDate,
+      isDisabledSubmit: this.#checkFields(),
+    });
   };
 
   #dateToCloseHandler = ([userDate]) => {
-    this._setState({
-      dateTo: userDate,
-      isDisabledSubmit: userDate === undefined,
-    });
     this.#dateFromPicker.set('maxDate', this._state.dateTo);
+    this.updateElement({
+      dateTo: userDate,
+      isDisabledSubmit: this.#checkFields(),
+    });
   };
 
   #formSubmitHandler = (evt) => {
@@ -173,24 +180,13 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       destination,
       isShowDestination: destination.length !== 0,
-      isDisabledSubmit: destination.length === 0,
+      isDisabledSubmit: this.#checkFields(),
     });
   };
 
   #priceInputHandler = (evt) => {
-    const targetValue = evt.target.value;
-
-    if (!isDigitsOnly(targetValue)) {
-      this._setState({
-        basePrice: this._state.prevValidValue,
-      });
-      evt.target.value = this._state.prevValidValue.toString();
-      return;
-    }
-
     this._setState({
-      basePrice: +targetValue,
-      prevValidValue: +targetValue,
+      basePrice: +evt.target.value,
     });
   };
 
@@ -202,7 +198,6 @@ export default class PointEditView extends AbstractStatefulView {
         destinationId: point.destination,
         destinations,
       });
-    const prevValidValue = point.basePrice;
     const isDisabledSubmit =
       point.destination.length === 0 ||
       point.dateFrom === null ||
@@ -212,7 +207,6 @@ export default class PointEditView extends AbstractStatefulView {
       ...point,
       isShowOffers,
       isShowDestination,
-      prevValidValue,
       isDisabledSubmit,
     };
   }
