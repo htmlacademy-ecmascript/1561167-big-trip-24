@@ -123,8 +123,6 @@ const compareByDate = ({ dateFrom: datePointA }, { dateFrom: datePointB }) => {
   return 0;
 };
 
-const isDigitsOnly = (value) => /^\d+$/.test(value);
-
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
@@ -145,5 +143,4 @@ export {
   isAllowedSortingType,
   compareByPrice,
   compareByDate,
-  isDigitsOnly,
 };
