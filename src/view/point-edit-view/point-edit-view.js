@@ -260,13 +260,12 @@ export default class PointEditView extends AbstractStatefulView {
   static parseStateToPoint(state) {
     const point = { ...state };
 
-    if (!point.isShowOffers) {
+    if (point.isShowOffers !== undefined && !point.isShowOffers) {
       point.offers = [];
     }
 
     delete point.isShowOffers;
     delete point.isShowDestinations;
-    delete point.prevValidValue;
     delete point.isDisabledSubmit;
 
     return point;

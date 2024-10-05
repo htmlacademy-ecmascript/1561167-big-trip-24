@@ -1,4 +1,4 @@
-const POINT_COUNT = 10;
+const POINT_COUNT = 2;
 
 const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',
@@ -73,6 +73,18 @@ const BLANK_POINT = {
   type: DEFAULT_POINT_TYPE,
 };
 
+const UserAction = {
+  UPDATE_POINT: 'update-point',
+  ADD_POINT: 'add-point',
+  DELETE_POINT: 'delete-point',
+};
+
+const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};
+
 export {
   POINT_COUNT,
   DateFormat,
@@ -86,4 +98,6 @@ export {
   BLANK_POINT,
   TypeTextMessage,
   ViewingMode,
+  UserAction,
+  UpdateType,
 };

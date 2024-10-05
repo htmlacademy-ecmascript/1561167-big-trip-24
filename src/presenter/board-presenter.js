@@ -33,6 +33,7 @@ export default class BoardPresenter {
   constructor({ boardContainer, tripModel }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
+    this.#tripModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -105,7 +106,7 @@ export default class BoardPresenter {
       pointListContainer: this.#pointListComponent.element,
       destinations: this.destinations,
       offers: this.offers,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
 
@@ -113,9 +114,11 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #handlePointChange = (updatedPoint) => {
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  #handleViewAction = ({ actionType, updateType, update }) => {
+    console.log(actionType, updateType, update);
   };
+
+  #handleModelEvent({ updateType, data }) {}
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());

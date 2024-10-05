@@ -1,4 +1,4 @@
-import { ViewingMode } from '../const';
+import { UpdateType, UserAction, ViewingMode } from '../const';
 import { remove, render, replace } from '../framework/render';
 import PointEditView from '../view/point-edit-view/point-edit-view';
 import PointView from '../view/point-view/point-view';
@@ -105,7 +105,11 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+    this.#handleDataChange({
+      actionType: UserAction.UPDATE_POINT,
+      updateType: UpdateType.MINOR,
+      update: point,
+    });
     this.#replaceFormToCard();
   };
 
@@ -119,9 +123,14 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({
+    const update = {
       ...this.#point,
       isFavorite: !this.#point.isFavorite,
+    };
+    this.#handleDataChange({
+      actionType: UserAction.UPDATE_POINT,
+      updateType: UpdateType.PATCH,
+      update,
     });
   };
 }
