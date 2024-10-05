@@ -21,6 +21,8 @@ export default class PointEditView extends AbstractStatefulView {
   #dateFromPicker = null;
   #dateToPicker = null;
 
+  #offerElements = null;
+
   constructor({
     point = BLANK_POINT,
     destinations,
@@ -53,12 +55,13 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
+    const sectionOffersElement = this.element.querySelector(
+      '.event__section--offers'
+    );
+
     this.element
       .querySelector('.event--edit')
       .addEventListener('submit', this.#formSubmitHandler);
-    this.element
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#closeFormClickHandler);
     this.element
       .querySelector('.event__type-group')
       .addEventListener('change', this.#typeToggleHandler);
@@ -68,6 +71,23 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
+
+    if (!this.#isNewPoint) {
+      this.element
+        .querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#closeFormClickHandler);
+    }
+
+    if (sectionOffersElement !== null) {
+      sectionOffersElement.addEventListener(
+        'change',
+        this.#offersChangeHandler
+      );
+      this.#offerElements = sectionOffersElement.querySelectorAll(
+        '.event__offer-checkbox'
+      );
+    }
+
     this.#initDatePicker();
   }
 
@@ -180,6 +200,19 @@ export default class PointEditView extends AbstractStatefulView {
       offers: [],
       isShowOffers: hasOffersByType({ type: targetType, offers: this.#offers }),
     });
+  };
+
+  #offersChangeHandler = (evt) => {
+    const offers = [];
+    evt.preventDefault();
+
+    this.#offerElements.forEach((offerElement) => {
+      if (offerElement.checked) {
+        offers.push(offerElement.id);
+      }
+    });
+
+    this._setState({ offers });
   };
 
   #destinationToggleHandler = (evt) => {

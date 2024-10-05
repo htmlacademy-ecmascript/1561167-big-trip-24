@@ -60,12 +60,12 @@ const createOffersItemTemplate = ({
     <div class="event__offer-selector">
       <input
         class="event__offer-checkbox  visually-hidden"
-        id="event-offer-${id}"
+        id="${id}"
         type="checkbox"
         name="event-offer-${getLastWord(title)}"
         ${isChecked ? 'checked' : ''}>
       <label class="event__offer-label"
-        for="event-offer-${id}">
+        for="${id}">
         <span class="event__offer-title">${title}</span>
         +€&nbsp;
         <span class="event__offer-price">${price}</span>
