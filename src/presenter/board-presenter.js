@@ -4,7 +4,6 @@ import {
   SortingType,
 } from '../const';
 import { render } from '../framework/render';
-import { updateItem } from '../utils/common';
 import {
   compareByDate,
   compareByDuration,
@@ -25,10 +24,6 @@ export default class BoardPresenter {
   #sortComponent = null;
 
   #tripModel = null;
-  #boardPoints = [];
-  #sourcedBoardPoints = [];
-  #offers = [];
-  #destinations = [];
 
   #filterType = DEFAULT_FILTER_TYPE;
   #currentSortigType = DEFAULT_SORTING_TYPE;
@@ -41,7 +36,13 @@ export default class BoardPresenter {
   }
 
   get points() {
-    return this.#tripModel.points;
+    switch (this.#currentSortigType) {
+      case SortingType.TIME:
+        return [...this.#tripModel.points].sort(compareByDuration);
+      case SortingType.PRICE:
+        return [...this.#tripModel.points].sort(compareByPrice);
+    }
+    return [...this.#tripModel.points].sort(compareByDate);
   }
 
   get offers() {
@@ -53,18 +54,13 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#tripModel.points].sort(compareByDate);
-    this.#sourcedBoardPoints = [...this.#boardPoints];
-    this.#offers = this.#tripModel.offers;
-    this.#destinations = this.#tripModel.destinations;
-
     this.#renderBoard();
   }
 
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
 
-    if (!this.#boardPoints.length) {
+    if (!this.points.length) {
       this.#renderNoPoints({ filterType: this.#filterType });
       return;
     }
@@ -90,7 +86,7 @@ export default class BoardPresenter {
 
   #renderPointList() {
     render(this.#pointListComponent, this.#boardComponent.element);
-    this.#renderPoints(this.#boardPoints);
+    this.#renderPoints(this.points);
   }
 
   #clearPointList() {
@@ -107,8 +103,8 @@ export default class BoardPresenter {
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
-      destinations: this.#destinations,
-      offers: this.#offers,
+      destinations: this.destinations,
+      offers: this.offers,
       onDataChange: this.#handlePointChange,
       onModeChange: this.#handleModeChange,
     });
@@ -117,27 +113,7 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #sortPoints(sortingType) {
-    switch (sortingType) {
-      case SortingType.TIME:
-        this.#boardPoints.sort(compareByDuration);
-        break;
-      case SortingType.PRICE:
-        this.#boardPoints.sort(compareByPrice);
-        break;
-      default:
-        this.#boardPoints = [...this.#sourcedBoardPoints];
-    }
-
-    this.#currentSortigType = sortingType;
-  }
-
   #handlePointChange = (updatedPoint) => {
-    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
-    this.#sourcedBoardPoints = updateItem(
-      this.#sourcedBoardPoints,
-      updatedPoint
-    );
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -150,7 +126,7 @@ export default class BoardPresenter {
       return;
     }
 
-    this.#sortPoints(sortingType);
+    this.#currentSortigType = sortingType;
     this.#clearPointList();
     this.#renderPointList();
   };
