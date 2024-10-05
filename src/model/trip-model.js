@@ -1,6 +1,7 @@
+import Observable from '../framework/observable';
 import { loadDestinations, loadOffers, loadPoints } from '../mock/mock';
 
-export default class TripModel {
+export default class TripModel extends Observable {
   #points = loadPoints();
   #destinations = loadDestinations();
   #offers = loadOffers();

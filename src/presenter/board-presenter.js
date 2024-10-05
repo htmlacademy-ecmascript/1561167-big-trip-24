@@ -40,6 +40,18 @@ export default class BoardPresenter {
     this.#tripModel = tripModel;
   }
 
+  get points() {
+    return this.#tripModel.points;
+  }
+
+  get offers() {
+    return this.#tripModel.offers;
+  }
+
+  get destinations() {
+    return this.#tripModel.destinations;
+  }
+
   init() {
     this.#boardPoints = [...this.#tripModel.points].sort(compareByDate);
     this.#sourcedBoardPoints = [...this.#boardPoints];
