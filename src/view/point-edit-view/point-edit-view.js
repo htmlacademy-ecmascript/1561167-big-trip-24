@@ -95,12 +95,25 @@ export default class PointEditView extends AbstractStatefulView {
     );
   }
 
-  #checkFields() {
+  #validateFields() {
     const elements = [
       ...this.element.querySelectorAll('input[data-monitored-field=""]'),
     ];
 
-    return elements.some((element) => element.value.length === 0);
+    return elements.some((element) => {
+      const isEmpty = element.value.length === 0;
+
+      if (element.classList.contains('event__input--destination')) {
+        return (
+          isEmpty ||
+          getDestinationIdByName({
+            nameDestination: element.value,
+            destinations: this.#destinations,
+          }).length === 0
+        );
+      }
+      return isEmpty;
+    });
   }
 
   #initDatePicker = () => {
@@ -136,7 +149,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#dateToPicker.set('minDate', this._state.dateFrom);
     this.updateElement({
       dateFrom: userDate,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
@@ -144,7 +157,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#dateFromPicker.set('maxDate', this._state.dateTo);
     this.updateElement({
       dateTo: userDate,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
@@ -180,7 +193,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       destination,
       isShowDestination: destination.length !== 0,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
