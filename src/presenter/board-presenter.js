@@ -1,5 +1,4 @@
 import {
-  DEFAULT_FILTER_TYPE,
   DEFAULT_SORTING_TYPE,
   SortingType,
   UpdateType,
@@ -29,8 +28,8 @@ export default class BoardPresenter {
   #tripModel = null;
   #filterModel = null;
 
-  #filterType = DEFAULT_FILTER_TYPE;
-  currentSortingType = DEFAULT_SORTING_TYPE;
+  #currentFilterType = null;
+  #currentSortingType = DEFAULT_SORTING_TYPE;
 
   #pointPresenters = new Map();
 
@@ -44,11 +43,11 @@ export default class BoardPresenter {
   }
 
   get points() {
-    const currentFilterType = this.#filterModel.filter;
+    this.#currentFilterType = this.#filterModel.filter;
     const points = this.#tripModel.points;
-    const filteredPoints = filterBy[currentFilterType](points);
+    const filteredPoints = filterBy[this.#currentFilterType](points);
 
-    switch (this.currentSortingType) {
+    switch (this.#currentSortingType) {
       case SortingType.TIME:
         return filteredPoints.sort(compareByDuration);
       case SortingType.PRICE:
@@ -74,7 +73,7 @@ export default class BoardPresenter {
     render(this.#boardComponent, this.#boardContainer);
 
     if (!this.points.length) {
-      this.#renderNoPoints({ filterType: this.#filterType });
+      this.#renderNoPoints();
       return;
     }
 
@@ -85,14 +84,14 @@ export default class BoardPresenter {
 
   #renderNoPoints() {
     this.#noPointsComponent = new NoPointsView({
-      filterType: this.#filterType,
+      filterType: this.#currentFilterType,
     });
     render(this.#noPointsComponent, this.#boardComponent.element);
   }
 
   #renderSort() {
     this.#sortComponent = new SortView({
-      currentSortingType: this.currentSortingType,
+      currentSortingType: this.#currentSortingType,
       onSortingTypeChange: this.#handleSortingTypeChange,
     });
     render(this.#sortComponent, this.#boardComponent.element);
@@ -103,10 +102,12 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
-    remove(this.#noPointsComponent);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
 
     if (resetSortingType) {
-      this.currentSortingType = DEFAULT_SORTING_TYPE;
+      this.#currentSortingType = DEFAULT_SORTING_TYPE;
     }
   }
 
@@ -164,11 +165,11 @@ export default class BoardPresenter {
   };
 
   #handleSortingTypeChange = (sortingType) => {
-    if (sortingType === this.currentSortingType) {
+    if (sortingType === this.#currentSortingType) {
       return;
     }
 
-    this.currentSortingType = sortingType;
+    this.#currentSortingType = sortingType;
     this.#clearBoard();
     this.#renderBoard();
   };
