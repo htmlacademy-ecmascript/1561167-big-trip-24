@@ -28,7 +28,7 @@ export default class BoardPresenter {
   #tripModel = null;
 
   #filterType = DEFAULT_FILTER_TYPE;
-  #currentSortigType = DEFAULT_SORTING_TYPE;
+  currentSortingType = DEFAULT_SORTING_TYPE;
 
   #pointPresenters = new Map();
 
@@ -39,7 +39,7 @@ export default class BoardPresenter {
   }
 
   get points() {
-    switch (this.#currentSortigType) {
+    switch (this.currentSortingType) {
       case SortingType.TIME:
         return [...this.#tripModel.points].sort(compareByDuration);
       case SortingType.PRICE:
@@ -82,7 +82,7 @@ export default class BoardPresenter {
 
   #renderSort() {
     this.#sortComponent = new SortView({
-      currentSortigType: this.#currentSortigType,
+      currentSortingType: this.currentSortingType,
       onSortingTypeChange: this.#handleSortingTypeChange,
     });
     render(this.#sortComponent, this.#boardComponent.element);
@@ -96,7 +96,7 @@ export default class BoardPresenter {
     remove(this.#noPointsComponent);
 
     if (resetSortingType) {
-      this.#currentSortigType = DEFAULT_SORTING_TYPE;
+      this.currentSortingType = DEFAULT_SORTING_TYPE;
     }
   }
 
@@ -139,8 +139,12 @@ export default class BoardPresenter {
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
+        this.#clearBoard(true);
+        this.#renderBoard();
         break;
     }
   };
@@ -150,11 +154,11 @@ export default class BoardPresenter {
   };
 
   #handleSortingTypeChange = (sortingType) => {
-    if (sortingType === this.#currentSortigType) {
+    if (sortingType === this.currentSortingType) {
       return;
     }
 
-    this.#currentSortigType = sortingType;
+    this.currentSortingType = sortingType;
     this.#clearBoard();
     this.#renderBoard();
   };

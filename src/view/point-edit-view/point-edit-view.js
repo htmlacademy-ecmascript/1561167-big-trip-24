@@ -10,13 +10,13 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 export default class PointEditView extends AbstractStatefulView {
-  #initialPoint = null;
   #destinations = [];
   #offers = [];
   #isNewPoint = false;
 
   #handleFormSubmit = null;
   #handleCloseFormClick = null;
+  #handleDeleteClick = null;
 
   #dateFromPicker = null;
   #dateToPicker = null;
@@ -30,9 +30,9 @@ export default class PointEditView extends AbstractStatefulView {
     isNewPoint,
     onFormSubmit,
     onCloseFormClick,
+    onDeleteClick,
   }) {
     super();
-    this.#initialPoint = point;
     this._setState(
       PointEditView.parsePointToState({ point, offers, destinations })
     );
@@ -41,6 +41,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#isNewPoint = isNewPoint ?? false;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseFormClick = onCloseFormClick;
+    this.#handleDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
@@ -71,6 +72,9 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
 
     if (!this.#isNewPoint) {
       this.element
@@ -183,12 +187,17 @@ export default class PointEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(PointEditView.parseStateToPoint(this.#initialPoint));
+    this.#handleFormSubmit(PointEditView.parseStateToPoint(this._state));
   };
 
   #closeFormClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleCloseFormClick();
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #typeToggleHandler = (evt) => {

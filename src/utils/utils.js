@@ -123,6 +123,10 @@ const compareByDate = ({ dateFrom: datePointA }, { dateFrom: datePointB }) => {
   return 0;
 };
 
+const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'D');
+
+const isNumbersEqual = (numberA, numberB) => numberA === numberB;
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
@@ -143,4 +147,6 @@ export {
   isAllowedSortingType,
   compareByPrice,
   compareByDate,
+  isDatesEqual,
+  isNumbersEqual,
 };

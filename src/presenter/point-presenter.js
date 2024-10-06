@@ -1,5 +1,6 @@
 import { UpdateType, UserAction, ViewingMode } from '../const';
 import { remove, render, replace } from '../framework/render';
+import { isDatesEqual, isNumbersEqual } from '../utils/utils';
 import PointEditView from '../view/point-edit-view/point-edit-view';
 import PointView from '../view/point-view/point-view';
 
@@ -52,6 +53,7 @@ export default class PointPresenter {
       offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
       onCloseFormClick: this.#handleCloseFormClick,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -104,11 +106,16 @@ export default class PointPresenter {
     }
   };
 
-  #handleFormSubmit = (point) => {
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate =
+      !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
+      !isDatesEqual(this.#point.dateTo, update.dateTo) ||
+      !isNumbersEqual(this.#point.basePrice, update.basePrice);
+
     this.#handleDataChange({
       actionType: UserAction.UPDATE_POINT,
-      updateType: UpdateType.MINOR,
-      update: point,
+      updateType: isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
     });
     this.#replaceFormToCard();
   };
@@ -130,6 +137,14 @@ export default class PointPresenter {
     this.#handleDataChange({
       actionType: UserAction.UPDATE_POINT,
       updateType: UpdateType.PATCH,
+      update,
+    });
+  };
+
+  #handleDeleteClick = (update) => {
+    this.#handleDataChange({
+      actionType: UserAction.DELETE_POINT,
+      updateType: UpdateType.MINOR,
       update,
     });
   };
