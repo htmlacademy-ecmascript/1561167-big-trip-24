@@ -1,4 +1,4 @@
-const POINT_COUNT = 2;
+const POINT_COUNT = 10;
 
 const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',

@@ -5,7 +5,7 @@ import {
   UpdateType,
   UserAction,
 } from '../const';
-import { render } from '../framework/render';
+import { remove, render } from '../framework/render';
 import {
   compareByDate,
   compareByDuration,
@@ -69,7 +69,8 @@ export default class BoardPresenter {
     }
 
     this.#renderSort();
-    this.#renderPointList();
+    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderPoints(this.points);
   }
 
   #renderNoPoints() {
@@ -81,20 +82,22 @@ export default class BoardPresenter {
 
   #renderSort() {
     this.#sortComponent = new SortView({
-      currentSortingType: this.#currentSortigType,
+      currentSortigType: this.#currentSortigType,
       onSortingTypeChange: this.#handleSortingTypeChange,
     });
     render(this.#sortComponent, this.#boardComponent.element);
   }
 
-  #renderPointList() {
-    render(this.#pointListComponent, this.#boardComponent.element);
-    this.#renderPoints(this.points);
-  }
-
-  #clearPointList() {
+  #clearBoard(resetSortingType = false) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointsComponent);
+
+    if (resetSortingType) {
+      this.#currentSortigType = DEFAULT_SORTING_TYPE;
+    }
   }
 
   #renderPoints(points) {
@@ -152,7 +155,7 @@ export default class BoardPresenter {
     }
 
     this.#currentSortigType = sortingType;
-    this.#clearPointList();
-    this.#renderPointList();
+    this.#clearBoard();
+    this.#renderBoard();
   };
 }
