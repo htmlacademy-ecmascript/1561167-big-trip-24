@@ -31,13 +31,13 @@ export default class TripModel extends Observable {
       ...this.#points.slice(index + 1),
     ];
 
-    this._notify({ updateType, update });
+    this._notify(updateType, update);
   }
 
   addPoint({ updateType, update }) {
     this.#points = [...update, this.#points];
 
-    this._notify({ updateType, update });
+    this._notify(updateType, update);
   }
 
   deletePoint({ updateType, update }) {
@@ -52,6 +52,6 @@ export default class TripModel extends Observable {
       ...this.#points.slice(index + 1),
     ];
 
-    this._notify({ updateType });
+    this._notify(updateType);
   }
 }

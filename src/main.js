@@ -2,8 +2,8 @@ import TripModel from './model/trip-model';
 import BoardPresenter from './presenter/board-presenter';
 import { render } from './framework/render';
 import NewPointButtonView from './view/new-point-button-view/new-point-button-view';
-import FilterView from './view/filter-view/filter-view';
-import { generateFilter } from './mock/filter';
+import FilterModel from './model/filter-model';
+import FilterPresenter from './presenter/filter-presenter';
 
 const pageHeaderElement = document.querySelector('.page-header');
 const tripMainElement = pageHeaderElement.querySelector('.trip-main');
@@ -17,13 +17,19 @@ const pageBodyContainerElement = pageMainElement.querySelector(
 );
 
 const tripModel = new TripModel();
+const filterModel = new FilterModel();
+const filterPresenter = new FilterPresenter({
+  filterContainer: tripControlsFiltersElement,
+  filterModel,
+  tripModel,
+});
 const boardPresenter = new BoardPresenter({
   boardContainer: pageBodyContainerElement,
   tripModel,
+  filterModel,
 });
-const filters = generateFilter(tripModel.points);
 
 render(new NewPointButtonView(), tripMainElement);
-render(new FilterView({ filters }), tripControlsFiltersElement);
 
+filterPresenter.init();
 boardPresenter.init();

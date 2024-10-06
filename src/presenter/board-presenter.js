@@ -6,6 +6,7 @@ import {
   UserAction,
 } from '../const';
 import { remove, render } from '../framework/render';
+import { filterBy } from '../utils/filter';
 import {
   compareByDate,
   compareByDuration,
@@ -26,26 +27,35 @@ export default class BoardPresenter {
   #sortComponent = null;
 
   #tripModel = null;
+  #filterModel = null;
 
   #filterType = DEFAULT_FILTER_TYPE;
   currentSortingType = DEFAULT_SORTING_TYPE;
 
   #pointPresenters = new Map();
 
-  constructor({ boardContainer, tripModel }) {
+  constructor({ boardContainer, tripModel, filterModel }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
+    this.#filterModel = filterModel;
+
+    this.#filterModel.addObserver(this.#handleModelEvent);
     this.#tripModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const currentFilterType = this.#filterModel.filter;
+    const points = this.#tripModel.points;
+    const filteredPoints = filterBy[currentFilterType](points);
+
     switch (this.currentSortingType) {
       case SortingType.TIME:
-        return [...this.#tripModel.points].sort(compareByDuration);
+        return filteredPoints.sort(compareByDuration);
       case SortingType.PRICE:
-        return [...this.#tripModel.points].sort(compareByPrice);
+        return filteredPoints.sort(compareByPrice);
     }
-    return [...this.#tripModel.points].sort(compareByDate);
+
+    return filteredPoints.sort(compareByDate);
   }
 
   get offers() {
@@ -133,7 +143,7 @@ export default class BoardPresenter {
     }
   };
 
-  #handleModelEvent = ({ updateType, update: data }) => {
+  #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
