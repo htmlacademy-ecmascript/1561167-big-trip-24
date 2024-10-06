@@ -266,7 +266,8 @@ const createPointEditTemplate = ({
             <input
               class="event__input  event__input--price"
               id="event-price-1"
-              type="number" min="1" max="10000" step="1"
+              type="number" min="1" max="100000" step="1"
+              pattern="^/\\d{1,5}$"
               name="event-price"
               value="${basePrice}"
               required>
