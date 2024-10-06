@@ -2,6 +2,8 @@ import {
   DEFAULT_FILTER_TYPE,
   DEFAULT_SORTING_TYPE,
   SortingType,
+  UpdateType,
+  UserAction,
 } from '../const';
 import { render } from '../framework/render';
 import {
@@ -115,10 +117,30 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = ({ actionType, updateType, update }) => {
-    console.log(actionType, updateType, update);
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#tripModel.updatePoint({ updateType, update });
+        break;
+      case UserAction.ADD_POINT:
+        this.#tripModel.addPoint({ updateType, update });
+        break;
+      case UserAction.DELETE_POINT:
+        this.#tripModel.deletePoint({ updateType, update });
+        break;
+    }
   };
 
-  #handleModelEvent({ updateType, data }) {}
+  #handleModelEvent = ({ updateType, update: data }) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        break;
+      case UpdateType.MAJOR:
+        break;
+    }
+  };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
