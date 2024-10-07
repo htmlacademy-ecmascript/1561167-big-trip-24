@@ -274,7 +274,7 @@ export default class PointEditView extends AbstractStatefulView {
     }
 
     delete point.isShowOffers;
-    delete point.isShowDestinations;
+    delete point.isShowDestination;
     delete point.isDisabledSubmit;
 
     return point;

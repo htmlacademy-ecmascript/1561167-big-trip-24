@@ -27,9 +27,22 @@ const boardPresenter = new BoardPresenter({
   boardContainer: pageBodyContainerElement,
   tripModel,
   filterModel,
+  onNewPointDestroy: handleNewPointFormClose,
+});
+const newPointButtonComponent = new NewPointButtonView({
+  onNewPointButtonClick: handleNewPointButtonClick,
 });
 
-render(new NewPointButtonView(), tripMainElement);
+function handleNewPointFormClose() {
+  newPointButtonComponent.element.toggleAttribute('disabled', false);
+}
+
+function handleNewPointButtonClick() {
+  boardPresenter.createNewPoint();
+  newPointButtonComponent.element.toggleAttribute('disabled', true);
+}
+
+render(newPointButtonComponent, tripMainElement);
 
 filterPresenter.init();
 boardPresenter.init();

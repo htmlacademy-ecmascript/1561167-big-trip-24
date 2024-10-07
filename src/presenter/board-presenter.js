@@ -1,4 +1,5 @@
 import {
+  DEFAULT_FILTER_TYPE,
   DEFAULT_SORTING_TYPE,
   SortingType,
   UpdateType,
@@ -15,6 +16,7 @@ import BoardView from '../view/board-view/board-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
 import SortView from '../view/sort-view/sort-view';
+import NewPointPresenter from './new-point-presenter';
 import PointPresenter from './point-presenter';
 
 export default class BoardPresenter {
@@ -32,11 +34,20 @@ export default class BoardPresenter {
   #currentSortingType = DEFAULT_SORTING_TYPE;
 
   #pointPresenters = new Map();
+  #newPointPresenter = null;
 
-  constructor({ boardContainer, tripModel, filterModel }) {
+  constructor({ boardContainer, tripModel, filterModel, onNewPointDestroy }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#pointListComponent.element,
+      destinations: this.destinations,
+      offers: this.offers,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewPointDestroy,
+    });
 
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#tripModel.addObserver(this.#handleModelEvent);
@@ -69,6 +80,12 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
+  createNewPoint() {
+    this.#currentSortingType = SortingType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, DEFAULT_FILTER_TYPE);
+    this.#newPointPresenter.init();
+  }
+
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
 
@@ -98,6 +115,7 @@ export default class BoardPresenter {
   }
 
   #clearBoard(resetSortingType = false) {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
@@ -161,6 +179,7 @@ export default class BoardPresenter {
   };
 
   #handleModeChange = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetViewingMode());
   };
 

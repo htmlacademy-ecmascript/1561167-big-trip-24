@@ -63,7 +63,6 @@ const ViewingMode = {
 };
 
 const BLANK_POINT = {
-  id: '',
   basePrice: 0,
   dateFrom: null,
   dateTo: null,

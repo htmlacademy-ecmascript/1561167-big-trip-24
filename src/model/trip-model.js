@@ -35,7 +35,7 @@ export default class TripModel extends Observable {
   }
 
   addPoint({ updateType, update }) {
-    this.#points = [...update, this.#points];
+    this.#points = [update, ...this.#points];
 
     this._notify(updateType, update);
   }
