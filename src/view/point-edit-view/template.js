@@ -1,3 +1,4 @@
+import he from 'he';
 import { DateFormat, PointType } from '../../const.js';
 import {
   getUppercaseFirstLetter,
@@ -232,7 +233,7 @@ const createPointEditTemplate = ({
               id="event-destination-1"
               type="text"
               name="event-destination"
-              value="${destinationTitle}"
+              value="${he.encode(destinationTitle)}"
               list="destination-list-1"
               data-monitored-field="">
             ${createDestinationListNamesTemplate(destinations)}
