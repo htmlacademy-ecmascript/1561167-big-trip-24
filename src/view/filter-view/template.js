@@ -1,21 +1,19 @@
-import { DEFAULT_FILTER_TYPE } from '../../const';
-
 const createFilterItemTemplate = ({ type, count }, isActive) => `
   <div class="trip-filters__filter">
     <input id="filter-${type}"
       class="trip-filters__filter-input  visually-hidden" type="radio"
       name="trip-filter"
-      value="${type}
-      "${isActive ? 'checked' : ''}
+      value="${type}"
+      ${isActive ? 'checked' : ''}
       ${count === 0 ? 'disabled' : ''}>
     <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
   </div>
 `;
 
-const createFilterTemplate = (filters) => {
+const createFilterTemplate = ({ filters, currentFilterType }) => {
   const filterTemplate = filters
     .map((filter) =>
-      createFilterItemTemplate(filter, filter.type === DEFAULT_FILTER_TYPE)
+      createFilterItemTemplate(filter, filter.type === currentFilterType)
     )
     .join('');
   return `

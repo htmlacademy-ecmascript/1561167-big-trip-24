@@ -10,16 +10,18 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 export default class PointEditView extends AbstractStatefulView {
-  #initialPoint = null;
   #destinations = [];
   #offers = [];
   #isNewPoint = false;
 
   #handleFormSubmit = null;
   #handleCloseFormClick = null;
+  #handleDeleteClick = null;
 
   #dateFromPicker = null;
   #dateToPicker = null;
+
+  #offerElements = null;
 
   constructor({
     point = BLANK_POINT,
@@ -28,9 +30,9 @@ export default class PointEditView extends AbstractStatefulView {
     isNewPoint,
     onFormSubmit,
     onCloseFormClick,
+    onDeleteClick,
   }) {
     super();
-    this.#initialPoint = point;
     this._setState(
       PointEditView.parsePointToState({ point, offers, destinations })
     );
@@ -39,6 +41,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#isNewPoint = isNewPoint ?? false;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleCloseFormClick = onCloseFormClick;
+    this.#handleDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
@@ -53,12 +56,13 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
+    const sectionOffersElement = this.element.querySelector(
+      '.event__section--offers'
+    );
+
     this.element
       .querySelector('.event--edit')
       .addEventListener('submit', this.#formSubmitHandler);
-    this.element
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#closeFormClickHandler);
     this.element
       .querySelector('.event__type-group')
       .addEventListener('change', this.#typeToggleHandler);
@@ -68,6 +72,26 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
+
+    if (!this.#isNewPoint) {
+      this.element
+        .querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#closeFormClickHandler);
+    }
+
+    if (sectionOffersElement !== null) {
+      sectionOffersElement.addEventListener(
+        'change',
+        this.#offersChangeHandler
+      );
+      this.#offerElements = sectionOffersElement.querySelectorAll(
+        '.event__offer-checkbox'
+      );
+    }
+
     this.#initDatePicker();
   }
 
@@ -95,12 +119,25 @@ export default class PointEditView extends AbstractStatefulView {
     );
   }
 
-  #checkFields() {
+  #validateFields() {
     const elements = [
       ...this.element.querySelectorAll('input[data-monitored-field=""]'),
     ];
 
-    return elements.some((element) => element.value.length === 0);
+    return elements.some((element) => {
+      const isEmpty = element.value.length === 0;
+
+      if (element.classList.contains('event__input--destination')) {
+        return (
+          isEmpty ||
+          getDestinationIdByName({
+            nameDestination: element.value,
+            destinations: this.#destinations,
+          }).length === 0
+        );
+      }
+      return isEmpty;
+    });
   }
 
   #initDatePicker = () => {
@@ -136,7 +173,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#dateToPicker.set('minDate', this._state.dateFrom);
     this.updateElement({
       dateFrom: userDate,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
@@ -144,18 +181,23 @@ export default class PointEditView extends AbstractStatefulView {
     this.#dateFromPicker.set('maxDate', this._state.dateTo);
     this.updateElement({
       dateTo: userDate,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(PointEditView.parseStateToPoint(this.#initialPoint));
+    this.#handleFormSubmit(PointEditView.parseStateToPoint(this._state));
   };
 
   #closeFormClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleCloseFormClick();
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #typeToggleHandler = (evt) => {
@@ -169,6 +211,19 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
+  #offersChangeHandler = (evt) => {
+    const offers = [];
+    evt.preventDefault();
+
+    this.#offerElements.forEach((offerElement) => {
+      if (offerElement.checked) {
+        offers.push(offerElement.id);
+      }
+    });
+
+    this._setState({ offers });
+  };
+
   #destinationToggleHandler = (evt) => {
     evt.preventDefault();
     const targetDestination = evt.target.value;
@@ -180,7 +235,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       destination,
       isShowDestination: destination.length !== 0,
-      isDisabledSubmit: this.#checkFields(),
+      isDisabledSubmit: this.#validateFields(),
     });
   };
 
@@ -214,13 +269,12 @@ export default class PointEditView extends AbstractStatefulView {
   static parseStateToPoint(state) {
     const point = { ...state };
 
-    if (!point.isShowOffers) {
+    if (point.isShowOffers !== undefined && !point.isShowOffers) {
       point.offers = [];
     }
 
     delete point.isShowOffers;
-    delete point.isShowDestinations;
-    delete point.prevValidValue;
+    delete point.isShowDestination;
     delete point.isDisabledSubmit;
 
     return point;

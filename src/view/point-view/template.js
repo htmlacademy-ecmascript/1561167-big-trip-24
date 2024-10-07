@@ -1,3 +1,4 @@
+import he from 'he';
 import { DateFormat } from '../../const.js';
 import {
   getDestinationById,
@@ -31,10 +32,11 @@ const createSelectedOffersTemplate = ({ point, offers }) => {
 
 const createPointTemplate = ({ point, destinations, offers }) => {
   const { type: pointType, basePrice, isFavorite, dateFrom, dateTo } = point;
-  const destinationName = getDestinationById({
-    destinationId: point.destination,
-    destinations,
-  });
+  const destinationName =
+    getDestinationById({
+      destinationId: point.destination,
+      destinations,
+    })?.name ?? '';
   const classFavoriteButtonActive = isFavorite
     ? 'event__favorite-btn--active'
     : '';
@@ -71,7 +73,7 @@ const createPointTemplate = ({ point, destinations, offers }) => {
         </div>
         <h3 class="event__title">
           ${pointType}
-          ${destinationName ? destinationName.name : ''}
+          ${he.encode(destinationName)}
         </h3>
         <div class="event__schedule">
           <p class="event__time">

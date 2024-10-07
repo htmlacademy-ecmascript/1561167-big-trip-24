@@ -1,3 +1,4 @@
+import he from 'he';
 import { DateFormat, PointType } from '../../const.js';
 import {
   getUppercaseFirstLetter,
@@ -60,12 +61,12 @@ const createOffersItemTemplate = ({
     <div class="event__offer-selector">
       <input
         class="event__offer-checkbox  visually-hidden"
-        id="event-offer-${id}"
+        id="${id}"
         type="checkbox"
         name="event-offer-${getLastWord(title)}"
         ${isChecked ? 'checked' : ''}>
       <label class="event__offer-label"
-        for="event-offer-${id}">
+        for="${id}">
         <span class="event__offer-title">${title}</span>
         +€&nbsp;
         <span class="event__offer-price">${price}</span>
@@ -232,7 +233,7 @@ const createPointEditTemplate = ({
               id="event-destination-1"
               type="text"
               name="event-destination"
-              value="${destinationTitle}"
+              value="${he.encode(destinationTitle)}"
               list="destination-list-1"
               data-monitored-field="">
             ${createDestinationListNamesTemplate(destinations)}
@@ -266,7 +267,8 @@ const createPointEditTemplate = ({
             <input
               class="event__input  event__input--price"
               id="event-price-1"
-              type="number" min="1" max="10000" step="1"
+              type="number" min="1" max="100000" step="1"
+              pattern="^/\\d{1,5}$"
               name="event-price"
               value="${basePrice}"
               required>
