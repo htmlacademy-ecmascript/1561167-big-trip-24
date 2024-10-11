@@ -63,7 +63,6 @@ const ViewingMode = {
 };
 
 const BLANK_POINT = {
-  id: '',
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
@@ -71,6 +70,18 @@ const BLANK_POINT = {
   isFavorite: false,
   offers: [],
   type: DEFAULT_POINT_TYPE,
+};
+
+const UserAction = {
+  UPDATE_POINT: 'update-point',
+  ADD_POINT: 'add-point',
+  DELETE_POINT: 'delete-point',
+};
+
+const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
 };
 
 export {
@@ -86,4 +97,6 @@ export {
   BLANK_POINT,
   TypeTextMessage,
   ViewingMode,
+  UserAction,
+  UpdateType,
 };

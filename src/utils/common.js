@@ -9,13 +9,10 @@ const shuffle = (items) => {
   return mixedItems;
 };
 
-const updateItem = (items, update) =>
-  items.map((item) => (item.id === update.id ? update : item));
-
 const adaptPointToClient = (point) => ({
   ...point,
   dateFrom: new Date(point.dateFrom),
   dateTo: new Date(point.dateTo),
 });
 
-export { shuffle, updateItem, adaptPointToClient };
+export { shuffle, adaptPointToClient };
