@@ -190,6 +190,9 @@ const createPointEditTemplate = ({
     basePrice,
     destination: destinationId,
     isDisabledSubmit,
+    isDisabled,
+    isSaving,
+    isDeleting,
   } = state;
   const destinationTitle =
     getDestinationById({
@@ -210,7 +213,7 @@ const createPointEditTemplate = ({
       </button>
     `
     : '';
-
+  const valueResetButtonTemplate = isDeleting ? 'Deleting...' : 'Delete';
   return `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -235,7 +238,8 @@ const createPointEditTemplate = ({
               name="event-destination"
               value="${he.encode(destinationTitle)}"
               list="destination-list-1"
-              data-monitored-field="">
+              data-monitored-field=""
+              ${isDisabled ? 'disabled' : ''}>
             ${createDestinationListNamesTemplate(destinations)}
           </div>
 
@@ -247,7 +251,8 @@ const createPointEditTemplate = ({
               type="text"
               name="event-start-time"
               value="${dateFromPointTemplate}"
-              data-monitored-field="">
+              data-monitored-field=""
+              ${isDisabled ? 'disabled' : ''}>
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
             <input
@@ -256,7 +261,8 @@ const createPointEditTemplate = ({
             type="text"
             name="event-end-time"
             value="${dateToPointTemplate}"
-            data-monitored-field="">
+            data-monitored-field=""
+            ${isDisabled ? 'disabled' : ''}>
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -271,16 +277,20 @@ const createPointEditTemplate = ({
               pattern="^/\\d{1,5}$"
               name="event-price"
               value="${basePrice}"
+              ${isDisabled ? 'disabled' : ''}
               required>
           </div>
           <button
             class="event__save-btn  btn  btn--blue"
             type="submit"
-            ${isDisabledSubmit ? 'disabled' : ''}
-            >Save
+            ${isDisabledSubmit || isDisabled ? 'disabled' : ''}>
+            ${isSaving ? 'Saving...' : 'Save'}
           </button>
-          <button class="event__reset-btn" type="reset">
-            ${isNewPoint ? 'Cancel' : 'Delete'}
+          <button
+            class="event__reset-btn"
+            type="reset"
+            ${isDisabled ? 'disabled' : ''}>
+            ${isNewPoint ? 'Cancel' : valueResetButtonTemplate}
           </button>
           ${rollupButtonTemplate}
         </header>

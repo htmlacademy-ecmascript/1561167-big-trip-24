@@ -66,11 +66,34 @@ export default class PointPresenter {
     }
 
     if (this.#mode === ViewingMode.FORM) {
-      replace(this.#pointEditComponent, prevPointEditComponent);
+      replace(this.#pointComponent, prevPointEditComponent);
+      this.#mode = ViewingMode.CARD;
     }
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
+  }
+
+  setSaving() {
+    if (this.#mode !== ViewingMode.FORM) {
+      return;
+    }
+
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setDeleting() {
+    if (this.#mode !== ViewingMode.FORM) {
+      return;
+    }
+
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isDeleting: true,
+    });
   }
 
   destroy() {
@@ -117,7 +140,6 @@ export default class PointPresenter {
       updateType: isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     });
-    this.#replaceFormToCard();
   };
 
   #handleCloseFormClick = () => {
