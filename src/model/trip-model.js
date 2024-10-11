@@ -57,31 +57,40 @@ export default class TripModel extends Observable {
         updatePoint,
         ...this.#points.slice(index + 1),
       ];
+      this._notify(updateType, updatePoint);
     } catch (error) {
       throw new Error('The task cannot be updated');
     }
-
-    this._notify(updateType, update);
   }
 
-  addPoint({ updateType, update }) {
-    this.#points = [update, ...this.#points];
+  async addPoint({ updateType, update }) {
+    try {
+      const response = await this.#tripApiService.createPoint(update);
+      const newPoint = this.#adapterService.adaptToClient(response);
 
-    this._notify(updateType, update);
+      this.#points = [newPoint, ...this.#points];
+      this._notify(updateType, newPoint);
+    } catch (error) {
+      throw new Error('The task cannot be added');
+    }
   }
 
-  deletePoint({ updateType, update }) {
+  async deletePoint({ updateType, update }) {
     const index = this.#points.findIndex(({ id }) => id === update.id);
 
     if (index === -1) {
       throw new Error('Unable to delete a non-existent point');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      ...this.#points.slice(index + 1),
-    ];
-
-    this._notify(updateType);
+    try {
+      await this.#tripApiService.deletePoint(update);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType);
+    } catch (error) {
+      throw new Error('The task cannot be deleted');
+    }
   }
 }
