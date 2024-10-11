@@ -4,6 +4,8 @@ import { render } from './framework/render';
 import NewPointButtonView from './view/new-point-button-view/new-point-button-view';
 import FilterModel from './model/filter-model';
 import FilterPresenter from './presenter/filter-presenter';
+import { AUTHORIZATION, END_POINT } from './const';
+import TripApiService from './trip-api-service';
 
 const pageHeaderElement = document.querySelector('.page-header');
 const tripMainElement = pageHeaderElement.querySelector('.trip-main');
@@ -16,7 +18,9 @@ const pageBodyContainerElement = pageMainElement.querySelector(
   '.page-body__container'
 );
 
-const tripModel = new TripModel();
+const tripModel = new TripModel({
+  tripApiService: new TripApiService(END_POINT, AUTHORIZATION),
+});
 const filterModel = new FilterModel();
 const filterPresenter = new FilterPresenter({
   filterContainer: tripControlsFiltersElement,
@@ -34,15 +38,20 @@ const newPointButtonComponent = new NewPointButtonView({
 });
 
 function handleNewPointFormClose() {
-  newPointButtonComponent.element.toggleAttribute('disabled', false);
+  toggleNewPointButton();
 }
 
 function handleNewPointButtonClick() {
   boardPresenter.createNewPoint();
-  newPointButtonComponent.element.toggleAttribute('disabled', true);
+  toggleNewPointButton(true);
+}
+
+function toggleNewPointButton(isDisabled = false) {
+  newPointButtonComponent.element.toggleAttribute('disabled', isDisabled);
 }
 
 render(newPointButtonComponent, tripMainElement);
 
 filterPresenter.init();
 boardPresenter.init();
+tripModel.init().finally(() => toggleNewPointButton());
