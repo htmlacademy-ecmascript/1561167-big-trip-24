@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { UpdateType, UserAction } from '../const';
 import { remove, render, RenderPosition } from '../framework/render';
 import PointEditView from '../view/point-edit-view/point-edit-view';
@@ -63,11 +62,18 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escapeKeyDownHandler);
   }
 
+  setSaving() {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange({
       actionType: UserAction.ADD_POINT,
       updateType: UpdateType.MINOR,
-      update: { id: nanoid(), ...point },
+      update: point,
     });
   };
 

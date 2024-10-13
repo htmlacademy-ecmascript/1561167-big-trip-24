@@ -13,6 +13,7 @@ import {
   compareByPrice,
 } from '../utils/utils';
 import BoardView from '../view/board-view/board-view';
+import LoadingTripView from '../view/loading-trip-view/loading-trip-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
 import SortView from '../view/sort-view/sort-view';
@@ -26,28 +27,25 @@ export default class BoardPresenter {
   #pointListComponent = new PointListView();
   #noPointsComponent = null;
   #sortComponent = null;
+  #loadingTripComponent = new LoadingTripView();
 
   #tripModel = null;
   #filterModel = null;
 
   #currentFilterType = null;
   #currentSortingType = DEFAULT_SORTING_TYPE;
+  #isLoading = true;
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
+
+  #handleNewPointDestroy = null;
 
   constructor({ boardContainer, tripModel, filterModel, onNewPointDestroy }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
-
-    this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#pointListComponent.element,
-      destinations: this.destinations,
-      offers: this.offers,
-      onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy,
-    });
+    this.#handleNewPointDestroy = onNewPointDestroy;
 
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#tripModel.addObserver(this.#handleModelEvent);
@@ -89,6 +87,11 @@ export default class BoardPresenter {
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
 
+    if (this.#isLoading) {
+      this.#renderLoadingTrip();
+      return;
+    }
+
     if (!this.points.length) {
       this.#renderNoPoints();
       return;
@@ -120,6 +123,7 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
+    remove(this.#loadingTripComponent);
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);
     }
@@ -148,15 +152,22 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
+  #renderLoadingTrip() {
+    render(this.#loadingTripComponent, this.#boardComponent.element);
+  }
+
   #handleViewAction = ({ actionType, updateType, update }) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this.#pointPresenters.get(update.id).setSaving();
         this.#tripModel.updatePoint({ updateType, update });
         break;
       case UserAction.ADD_POINT:
+        this.#newPointPresenter.setSaving();
         this.#tripModel.addPoint({ updateType, update });
         break;
       case UserAction.DELETE_POINT:
+        this.#pointPresenters.get(update.id).setDeleting();
         this.#tripModel.deletePoint({ updateType, update });
         break;
     }
@@ -173,6 +184,18 @@ export default class BoardPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard(true);
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingTripComponent);
+        this.#newPointPresenter = new NewPointPresenter({
+          pointListContainer: this.#pointListComponent.element,
+          destinations: this.destinations,
+          offers: this.offers,
+          onDataChange: this.#handleViewAction,
+          onDestroy: this.#handleNewPointDestroy,
+        });
         this.#renderBoard();
         break;
     }

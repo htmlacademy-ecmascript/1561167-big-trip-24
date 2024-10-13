@@ -1,5 +1,3 @@
-const POINT_COUNT = 10;
-
 const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',
   EVENT_TEMPLATE: 'DD/MM/YY HH:mm',
@@ -82,10 +80,31 @@ const UpdateType = {
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',
+  INIT: 'init',
 };
 
+const AUTHORIZATION = 'Basic YTbOIc8zF9dCXvh3tLwEkWgjxuMpQr';
+const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const UrlHandle = {
+  READ_POINTS: 'points',
+  READ_DESTINATIONS: 'destinations',
+  READ_OFFERS: 'offers',
+  CREATE: 'points',
+  UPDATE: 'points',
+  DELETE: 'points',
+};
+
+const TEXT_SHOW_LOADING = 'Loading...';
+
 export {
-  POINT_COUNT,
   DateFormat,
   PointType,
   DEFAULT_POINT_TYPE,
@@ -99,4 +118,9 @@ export {
   ViewingMode,
   UserAction,
   UpdateType,
+  AUTHORIZATION,
+  END_POINT,
+  Method,
+  UrlHandle,
+  TEXT_SHOW_LOADING,
 };
