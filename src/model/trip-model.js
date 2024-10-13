@@ -33,12 +33,12 @@ export default class TripModel extends Observable {
       this.#points = points.map(this.#adapterService.adaptToClient);
       this.#offers = await this.#tripApiService.offers;
       this.#destinations = await this.#tripApiService.destinations;
+      this._notify(UpdateType.INIT);
     } catch (error) {
       this.#points = [];
       this.#offers = [];
       this.#destinations = [];
     }
-    this._notify(UpdateType.INIT);
   }
 
   async updatePoint({ updateType, update }) {

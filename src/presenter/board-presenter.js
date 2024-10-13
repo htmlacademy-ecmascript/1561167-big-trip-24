@@ -88,7 +88,7 @@ export default class BoardPresenter {
     render(this.#boardComponent, this.#boardContainer);
 
     if (this.#isLoading) {
-      this.#renderLoadimgTrip();
+      this.#renderLoadingTrip();
       return;
     }
 
@@ -152,7 +152,7 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderLoadimgTrip() {
+  #renderLoadingTrip() {
     render(this.#loadingTripComponent, this.#boardComponent.element);
   }
 
