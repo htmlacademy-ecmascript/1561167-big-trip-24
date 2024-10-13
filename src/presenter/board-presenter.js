@@ -2,10 +2,12 @@ import {
   DEFAULT_FILTER_TYPE,
   DEFAULT_SORTING_TYPE,
   SortingType,
+  TimeLimit,
   UpdateType,
   UserAction,
 } from '../const';
 import { remove, render } from '../framework/render';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
 import { filterBy } from '../utils/filter';
 import {
   compareByDate,
@@ -40,6 +42,11 @@ export default class BoardPresenter {
   #newPointPresenter = null;
 
   #handleNewPointDestroy = null;
+
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT,
+  });
 
   constructor({ boardContainer, tripModel, filterModel, onNewPointDestroy }) {
     this.#boardContainer = boardContainer;
@@ -157,6 +164,7 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = async ({ actionType, updateType, update }) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
@@ -183,6 +191,7 @@ export default class BoardPresenter {
         }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {

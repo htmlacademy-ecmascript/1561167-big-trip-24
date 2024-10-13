@@ -104,6 +104,11 @@ const UrlHandle = {
 
 const TEXT_SHOW_LOADING = 'Loading...';
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 export {
   DateFormat,
   PointType,
@@ -123,4 +128,5 @@ export {
   Method,
   UrlHandle,
   TEXT_SHOW_LOADING,
+  TimeLimit,
 };
