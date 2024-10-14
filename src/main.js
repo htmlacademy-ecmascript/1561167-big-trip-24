@@ -29,6 +29,7 @@ const filterPresenter = new FilterPresenter({
   tripModel,
 });
 const boardPresenter = new BoardPresenter({
+  infoContainer: tripMainElement,
   boardContainer: pageBodyContainerElement,
   tripModel,
   filterModel,
