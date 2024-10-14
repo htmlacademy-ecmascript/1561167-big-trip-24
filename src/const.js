@@ -81,6 +81,7 @@ const UpdateType = {
   MINOR: 'minor',
   MAJOR: 'major',
   INIT: 'init',
+  FAILURE: 'failure',
 };
 
 const AUTHORIZATION = 'Basic YTbOIc8zF9dCXvh3tLwEkWgjxuMpQr';

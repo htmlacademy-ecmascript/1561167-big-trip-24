@@ -15,6 +15,7 @@ import {
   compareByPrice,
 } from '../utils/utils';
 import BoardView from '../view/board-view/board-view';
+import FailureLoadView from '../view/failure-load-view/failure-load-view';
 import LoadingTripView from '../view/loading-trip-view/loading-trip-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
@@ -30,6 +31,7 @@ export default class BoardPresenter {
   #noPointsComponent = null;
   #sortComponent = null;
   #loadingTripComponent = new LoadingTripView();
+  #failureLoadComponent = new FailureLoadView();
 
   #tripModel = null;
   #filterModel = null;
@@ -109,13 +111,6 @@ export default class BoardPresenter {
     this.#renderPoints(this.points);
   }
 
-  #renderNoPoints() {
-    this.#noPointsComponent = new NoPointsView({
-      filterType: this.#currentFilterType,
-    });
-    render(this.#noPointsComponent, this.#boardComponent.element);
-  }
-
   #renderSort() {
     this.#sortComponent = new SortView({
       currentSortingType: this.#currentSortingType,
@@ -161,6 +156,17 @@ export default class BoardPresenter {
 
   #renderLoadingTrip() {
     render(this.#loadingTripComponent, this.#boardComponent.element);
+  }
+
+  #renderNoPoints() {
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#currentFilterType,
+    });
+    render(this.#noPointsComponent, this.#boardComponent.element);
+  }
+
+  #renderFailurLoad() {
+    render(this.#failureLoadComponent, this.#boardComponent.element);
   }
 
   #handleViewAction = async ({ actionType, updateType, update }) => {
@@ -218,6 +224,11 @@ export default class BoardPresenter {
           onDestroy: this.#handleNewPointDestroy,
         });
         this.#renderBoard();
+        break;
+      case UpdateType.FAILURE:
+        this.#isLoading = false;
+        remove(this.#loadingTripComponent);
+        this.#renderFailurLoad();
         break;
     }
   };

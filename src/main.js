@@ -54,8 +54,10 @@ render(newPointButtonComponent, tripMainElement);
 
 filterPresenter.init();
 boardPresenter.init();
-tripModel
-  .init()
-  .finally(() =>
-    toggleButtonAttribute({ buttonElement: newPointButtonComponent.element })
-  );
+tripModel.init().finally(() => {
+  if (tripModel.isFailure) {
+    return;
+  }
+
+  toggleButtonAttribute({ buttonElement: newPointButtonComponent.element });
+});
