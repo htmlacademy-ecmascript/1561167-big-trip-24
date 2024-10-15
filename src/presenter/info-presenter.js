@@ -6,24 +6,23 @@ import {
   humanizeDateFormat,
 } from '../utils/utils';
 import InfoView from '../view/info-view.js/info-view';
-import { DateFormat } from '../const';
+import { DateFormat, UpdateType } from '../const';
 
 export default class InfoPresenter {
-  #points = [];
-  #offers = [];
-  #destinations = [];
-
   #infoContainer = null;
 
   #tripModel = null;
 
   #infoComponent = null;
 
+  #title = '';
+  #startDateFirstPoint = '';
+  #endDateLastPoint = '';
+  #costValue = 0;
+
   constructor({ infoContainer, tripModel }) {
     this.#infoContainer = infoContainer;
     this.#tripModel = tripModel;
-
-    this.#tripModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -39,27 +38,34 @@ export default class InfoPresenter {
   }
 
   init() {
-    const title = this.#getDestinationsTrip({
+    this.#tripModel.addObserver(this.#handleModelEvent);
+  }
+
+  #calculateIndicators() {
+    this.#title = this.#getDestinationsTrip({
       points: this.points,
       destinations: this.destinations,
     });
-    const startDateFirstPoint = this.#getStartDateFirstPoint({
+    this.#startDateFirstPoint = this.#getStartDateFirstPoint({
       points: this.points,
     });
-    const endDateLastPoint = this.#getEndDateLastPoint({
+    this.#endDateLastPoint = this.#getEndDateLastPoint({
       points: this.points,
     });
-    const costValue = this.#getCostValueTrip({
+    this.#costValue = this.#getCostValueTrip({
       points: this.points,
       offers: this.offers,
     });
+  }
+
+  #renderInfo() {
     const prevInfoComponent = this.#infoComponent;
 
     this.#infoComponent = new InfoView({
-      title,
-      startDate: startDateFirstPoint,
-      endDate: endDateLastPoint,
-      costValue,
+      title: this.#title,
+      startDate: this.#startDateFirstPoint,
+      endDate: this.#endDateLastPoint,
+      costValue: this.#costValue,
     });
 
     if (prevInfoComponent === null) {
@@ -75,7 +81,9 @@ export default class InfoPresenter {
     remove(prevInfoComponent);
   }
 
-  #isEmptyTrip = (points) => points.length === 0;
+  #isEmptyTrip(points) {
+    return points.length === 0;
+  }
 
   #getDestinationsTrip({ points, destinations }) {
     if (this.#isEmptyTrip(points)) {
@@ -87,7 +95,7 @@ export default class InfoPresenter {
         getDestinationById({ destinations, destinationId }).name
     );
 
-    if (points.length < 3) {
+    if (points.length <= 3) {
       return titles.join(' — ');
     }
 
@@ -145,7 +153,11 @@ export default class InfoPresenter {
     return (costValue + sumAllPrices).toString();
   }
 
-  #handleModelEvent = () => {
-    this.init();
+  #handleModelEvent = (updateType) => {
+    if (updateType === UpdateType.FAILURE) {
+      return;
+    }
+    this.#calculateIndicators();
+    this.#renderInfo();
   };
 }

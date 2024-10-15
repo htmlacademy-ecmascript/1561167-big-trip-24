@@ -7,6 +7,7 @@ import FilterPresenter from './presenter/filter-presenter';
 import { AUTHORIZATION, END_POINT } from './const';
 import TripApiService from './trip-api-service';
 import { toggleButtonAttribute } from './utils/utils';
+import InfoPresenter from './presenter/info-presenter';
 
 const pageHeaderElement = document.querySelector('.page-header');
 const tripMainElement = pageHeaderElement.querySelector('.trip-main');
@@ -26,6 +27,10 @@ const filterModel = new FilterModel();
 const filterPresenter = new FilterPresenter({
   filterContainer: tripControlsFiltersElement,
   filterModel,
+  tripModel,
+});
+const infoPresenter = new InfoPresenter({
+  infoContainer: tripMainElement,
   tripModel,
 });
 const boardPresenter = new BoardPresenter({
@@ -53,6 +58,7 @@ function handleNewPointButtonClick() {
 
 render(newPointButtonComponent, tripMainElement);
 
+infoPresenter.init();
 filterPresenter.init();
 boardPresenter.init();
 tripModel.init().finally(() => {

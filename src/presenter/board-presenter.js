@@ -20,7 +20,6 @@ import LoadingTripView from '../view/loading-trip-view/loading-trip-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
 import SortView from '../view/sort-view/sort-view';
-import InfoPresenter from './info-presenter';
 import NewPointPresenter from './new-point-presenter';
 import PointPresenter from './point-presenter';
 
@@ -43,7 +42,6 @@ export default class BoardPresenter {
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
-  #infoPresenter = null;
 
   #handleNewPointDestroy = null;
 
@@ -52,21 +50,11 @@ export default class BoardPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT,
   });
 
-  constructor({
-    infoContainer,
-    boardContainer,
-    tripModel,
-    filterModel,
-    onNewPointDestroy,
-  }) {
+  constructor({ boardContainer, tripModel, filterModel, onNewPointDestroy }) {
     this.#boardContainer = boardContainer;
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
     this.#handleNewPointDestroy = onNewPointDestroy;
-    this.#infoPresenter = new InfoPresenter({
-      infoContainer,
-      tripModel: this.#tripModel,
-    });
 
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#tripModel.addObserver(this.#handleModelEvent);
@@ -235,7 +223,6 @@ export default class BoardPresenter {
           onDataChange: this.#handleViewAction,
           onDestroy: this.#handleNewPointDestroy,
         });
-        this.#infoPresenter.init();
         this.#renderBoard();
         break;
       case UpdateType.FAILURE:
