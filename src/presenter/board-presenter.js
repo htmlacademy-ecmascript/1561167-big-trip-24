@@ -228,6 +228,9 @@ export default class BoardPresenter {
       case UpdateType.FAILURE:
         this.#isLoading = false;
         remove(this.#loadingTripComponent);
+        if (this.#noPointsComponent) {
+          remove(this.#noPointsComponent);
+        }
         this.#renderFailurLoad();
         break;
     }

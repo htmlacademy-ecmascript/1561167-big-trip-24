@@ -12,6 +12,9 @@ export default class InfoPresenter {
   #infoContainer = null;
 
   #tripModel = null;
+  #points = [];
+  #offers = [];
+  #destinations = [];
 
   #infoComponent = null;
 
@@ -26,15 +29,15 @@ export default class InfoPresenter {
   }
 
   get points() {
-    return [...this.#tripModel.points].sort(compareByDate);
+    return this.#points;
   }
 
   get offers() {
-    return this.#tripModel.offers;
+    return this.#offers;
   }
 
   get destinations() {
-    return this.#tripModel.destinations;
+    return this.#destinations;
   }
 
   init() {
@@ -157,6 +160,9 @@ export default class InfoPresenter {
     if (updateType === UpdateType.FAILURE) {
       return;
     }
+    this.#points = [...this.#tripModel.points].sort(compareByDate);
+    this.#offers = this.#tripModel.offers;
+    this.#destinations = this.#tripModel.destinations;
     this.#calculateIndicators();
     this.#renderInfo();
   };
