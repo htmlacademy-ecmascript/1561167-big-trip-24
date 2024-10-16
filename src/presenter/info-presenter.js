@@ -99,6 +99,9 @@ export default class InfoPresenter {
     );
 
     if (points.length <= 3) {
+      for (let i = 3 - points.length; i > 0; i--) {
+        titles.unshift(titles[0]);
+      }
       return titles.join(' — ');
     }
 
@@ -106,10 +109,6 @@ export default class InfoPresenter {
   }
 
   #getStartDateFirstPoint({ points }) {
-    if (this.#isEmptyTrip(points)) {
-      return;
-    }
-
     const startDate = humanizeDateFormat(
       points[0].dateFrom,
       DateFormat.SHORT_TEMPLATE
@@ -118,10 +117,6 @@ export default class InfoPresenter {
   }
 
   #getEndDateLastPoint({ points }) {
-    if (this.#isEmptyTrip(points)) {
-      return;
-    }
-
     const endDate = humanizeDateFormat(
       points[points.length - 1].dateTo,
       DateFormat.SHORT_TEMPLATE
@@ -130,10 +125,6 @@ export default class InfoPresenter {
   }
 
   #getCostValueTrip({ points, offers }) {
-    if (this.#isEmptyTrip(points)) {
-      return;
-    }
-
     const allPrices = points.reduce((prevPrices, point) => {
       const pointPrices = getSelectedOffersByType({
         point,
@@ -163,7 +154,10 @@ export default class InfoPresenter {
     this.#points = [...this.#tripModel.points].sort(compareByDate);
     this.#offers = this.#tripModel.offers;
     this.#destinations = this.#tripModel.destinations;
-    this.#calculateIndicators();
-    this.#renderInfo();
+
+    if (!this.#isEmptyTrip(this.points)) {
+      this.#calculateIndicators();
+      this.#renderInfo();
+    }
   };
 }
