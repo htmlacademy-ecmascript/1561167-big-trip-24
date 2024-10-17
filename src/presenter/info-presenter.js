@@ -62,26 +62,19 @@ export default class InfoPresenter {
   }
 
   #renderInfo() {
-    const prevInfoComponent = this.#infoComponent;
-
     this.#infoComponent = new InfoView({
       title: this.#title,
       startDate: this.#startDateFirstPoint,
       endDate: this.#endDateLastPoint,
       costValue: this.#costValue,
     });
+    render(this.#infoComponent, this.#infoContainer, RenderPosition.AFTERBEGIN);
+  }
 
-    if (prevInfoComponent === null) {
-      render(
-        this.#infoComponent,
-        this.#infoContainer,
-        RenderPosition.AFTERBEGIN
-      );
-      return;
+  #clearInfo() {
+    if (this.#infoComponent !== null) {
+      remove(this.#infoComponent);
     }
-
-    replace(this.#infoComponent, prevInfoComponent);
-    remove(prevInfoComponent);
   }
 
   #isEmptyTrip(points) {
@@ -155,6 +148,7 @@ export default class InfoPresenter {
     this.#offers = this.#tripModel.offers;
     this.#destinations = this.#tripModel.destinations;
 
+    this.#clearInfo();
     if (!this.#isEmptyTrip(this.points)) {
       this.#calculateIndicators();
       this.#renderInfo();

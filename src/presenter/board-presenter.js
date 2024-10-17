@@ -90,6 +90,13 @@ export default class BoardPresenter {
   createNewPoint() {
     this.#currentSortingType = SortingType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, DEFAULT_FILTER_TYPE);
+
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+      this.#renderSort();
+      render(this.#pointListComponent, this.#boardComponent.element);
+    }
+
     this.#newPointPresenter.init();
   }
 
