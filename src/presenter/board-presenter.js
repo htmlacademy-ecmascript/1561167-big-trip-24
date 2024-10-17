@@ -91,10 +91,12 @@ export default class BoardPresenter {
     this.#currentSortingType = SortingType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, DEFAULT_FILTER_TYPE);
 
-    if (this.#noPointsComponent) {
-      remove(this.#noPointsComponent);
+    if (this.#isEmptyPoints()) {
+      if (this.#noPointsComponent) {
+        remove(this.#noPointsComponent);
+      }
       this.#renderSort();
-      render(this.#pointListComponent, this.#boardComponent.element);
+      this.#renderPointList();
     }
 
     this.#newPointPresenter.init();
@@ -108,13 +110,13 @@ export default class BoardPresenter {
       return;
     }
 
-    if (!this.points.length) {
+    if (this.#isEmptyPoints()) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
-    render(this.#pointListComponent, this.#boardComponent.element);
+    this.#renderPointList();
     this.#renderPoints(this.points);
   }
 
@@ -176,6 +178,17 @@ export default class BoardPresenter {
     render(this.#failureLoadComponent, this.#boardComponent.element);
   }
 
+  #renderPointList() {
+    if (this.#pointListComponent === null) {
+      this.#pointListComponent = new PointListView();
+    }
+    render(this.#pointListComponent, this.#boardComponent.element);
+  }
+
+  #isEmptyPoints() {
+    return this.points.length === 0;
+  }
+
   #handleViewAction = async ({ actionType, updateType, update }) => {
     this.#uiBlocker.block();
     switch (actionType) {
@@ -228,7 +241,7 @@ export default class BoardPresenter {
           destinations: this.destinations,
           offers: this.offers,
           onDataChange: this.#handleViewAction,
-          onDestroy: this.#handleNewPointDestroy,
+          onDestroy: this.#handleNewPointCancel,
         });
         this.#renderBoard();
         break;
@@ -241,6 +254,15 @@ export default class BoardPresenter {
         this.#renderFailurLoad();
         break;
     }
+  };
+
+  #handleNewPointCancel = () => {
+    if (this.#isEmptyPoints()) {
+      remove(this.#sortComponent);
+      remove(this.#pointListComponent);
+      this.#renderNoPoints();
+    }
+    this.#handleNewPointDestroy();
   };
 
   #handleModeChange = () => {

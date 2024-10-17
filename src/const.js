@@ -107,8 +107,8 @@ const UrlHandle = {
 const TEXT_SHOW_LOADING = 'Loading...';
 
 const TimeLimit = {
-  LOWER_LIMIT: 350,
-  UPPER_LIMIT: 1000,
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1500,
 };
 
 export {

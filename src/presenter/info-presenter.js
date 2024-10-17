@@ -1,4 +1,4 @@
-import { remove, render, RenderPosition, replace } from '../framework/render';
+import { remove, render, RenderPosition } from '../framework/render';
 import {
   compareByDate,
   getDestinationById,
