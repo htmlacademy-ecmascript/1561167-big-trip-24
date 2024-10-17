@@ -127,6 +127,9 @@ const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'D');
 
 const isNumbersEqual = (numberA, numberB) => numberA === numberB;
 
+const toggleButtonAttribute = ({ buttonElement, isDisabled = false }) =>
+  buttonElement?.toggleAttribute('disabled', isDisabled);
+
 export {
   humanizeDateCalendarFormat,
   humanizeDateFormat,
@@ -149,4 +152,5 @@ export {
   compareByDate,
   isDatesEqual,
   isNumbersEqual,
+  toggleButtonAttribute,
 };

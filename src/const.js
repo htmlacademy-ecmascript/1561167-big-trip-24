@@ -2,6 +2,7 @@ const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',
   EVENT_TEMPLATE: 'DD/MM/YY HH:mm',
   INVERTED_SHORT_TEMPLATE: 'MMM DD',
+  SHORT_TEMPLATE: 'DD MMM',
   AVERAGE_EVENT_DURATION_TEMPLATE: 'HH[H] mm[M]',
   SHORT_EVENT_DURATION_TEMPLATE: 'mm[M]',
   LONG_EVENT_DURATION_TEMPLATE: 'DD[D] HH[H] mm[M]',
@@ -81,6 +82,7 @@ const UpdateType = {
   MINOR: 'minor',
   MAJOR: 'major',
   INIT: 'init',
+  FAILURE: 'failure',
 };
 
 const AUTHORIZATION = 'Basic YTbOIc8zF9dCXvh3tLwEkWgjxuMpQr';
@@ -104,6 +106,11 @@ const UrlHandle = {
 
 const TEXT_SHOW_LOADING = 'Loading...';
 
+const TimeLimit = {
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1500,
+};
+
 export {
   DateFormat,
   PointType,
@@ -123,4 +130,5 @@ export {
   Method,
   UrlHandle,
   TEXT_SHOW_LOADING,
+  TimeLimit,
 };
