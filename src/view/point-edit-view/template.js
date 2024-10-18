@@ -54,6 +54,7 @@ const createPointTypeListTemplate = (currentPointType) => {
 const createOffersItemTemplate = ({
   availableOffer: { id, title, price },
   selectedOffersIDs,
+  isDisabled,
 }) => {
   const isChecked = selectedOffersIDs.includes(id);
 
@@ -64,7 +65,8 @@ const createOffersItemTemplate = ({
         id="${id}"
         type="checkbox"
         name="event-offer-${getLastWord(title)}"
-        ${isChecked ? 'checked' : ''}>
+        ${isChecked ? 'checked' : ''}
+        ${isDisabled ? 'disabled' : ''}>
       <label class="event__offer-label"
         for="${id}">
         <span class="event__offer-title">${title}</span>
@@ -76,7 +78,7 @@ const createOffersItemTemplate = ({
 };
 
 const createAvailableOffersTemplate = ({
-  state: { type, offers: offersIDs, isShowOffers },
+  state: { type, offers: offersIDs, isShowOffers, isDisabled },
   offers,
 }) => {
   if (!isShowOffers) {
@@ -89,6 +91,7 @@ const createAvailableOffersTemplate = ({
       createOffersItemTemplate({
         availableOffer,
         selectedOffersIDs: offersIDs,
+        isDisabled,
       })
     )
     .join('');

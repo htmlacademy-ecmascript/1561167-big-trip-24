@@ -227,14 +227,20 @@ export default class PointEditView extends AbstractStatefulView {
   #destinationToggleHandler = (evt) => {
     evt.preventDefault();
     const targetDestination = evt.target.value;
-    const destination = getDestinationIdByName({
+    const destinationId = getDestinationIdByName({
       nameDestination: targetDestination,
       destinations: this.#destinations,
     });
 
+    const isShowDestination =
+      destinationId.length !== 0 &&
+      hasDetailsDestination({
+        destinationId,
+        destinations: this.#destinations,
+      });
     this.updateElement({
-      destination,
-      isShowDestination: destination.length !== 0,
+      destination: destinationId,
+      isShowDestination,
       isDisabledSubmit: this.#validateFields(),
     });
   };

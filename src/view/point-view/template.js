@@ -72,8 +72,7 @@ const createPointTemplate = ({ point, destinations, offers }) => {
           >
         </div>
         <h3 class="event__title">
-          ${pointType}
-          ${he.encode(destinationName)}
+          ${pointType} ${he.encode(destinationName)}
         </h3>
         <div class="event__schedule">
           <p class="event__time">

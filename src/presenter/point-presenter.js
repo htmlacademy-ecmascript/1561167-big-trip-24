@@ -74,6 +74,23 @@ export default class PointPresenter {
     remove(prevPointEditComponent);
   }
 
+  setAborting() {
+    if (this.#mode === ViewingMode.CARD) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
+
   setSaving() {
     if (this.#mode !== ViewingMode.FORM) {
       return;

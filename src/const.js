@@ -2,9 +2,7 @@ const DateFormat = {
   TIME_TEMPLATE: 'HH:mm',
   EVENT_TEMPLATE: 'DD/MM/YY HH:mm',
   INVERTED_SHORT_TEMPLATE: 'MMM DD',
-  AVERAGE_EVENT_DURATION_TEMPLATE: 'HH[H] mm[M]',
-  SHORT_EVENT_DURATION_TEMPLATE: 'mm[M]',
-  LONG_EVENT_DURATION_TEMPLATE: 'DD[D] HH[H] mm[M]',
+  SHORT_TEMPLATE: 'DD MMM',
   MACHINE_TEMPLATE: 'YYYY-MM-DD',
   FULL_MACHINE_TEMPLATE: 'YYYY-MM-DD[T]HH:mm',
 };
@@ -81,6 +79,7 @@ const UpdateType = {
   MINOR: 'minor',
   MAJOR: 'major',
   INIT: 'init',
+  FAILURE: 'failure',
 };
 
 const AUTHORIZATION = 'Basic YTbOIc8zF9dCXvh3tLwEkWgjxuMpQr';
@@ -102,7 +101,20 @@ const UrlHandle = {
   DELETE: 'points',
 };
 
-const TEXT_SHOW_LOADING = 'Loading...';
+const LoaderStatus = {
+  LOADING: 'LOADING',
+  FAILURE: 'FAILURE',
+};
+
+const LoaderMessages = {
+  [LoaderStatus.LOADING]: 'Loading...',
+  [LoaderStatus.FAILURE]: 'Failed to load latest route information',
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1500,
+};
 
 export {
   DateFormat,
@@ -122,5 +134,7 @@ export {
   END_POINT,
   Method,
   UrlHandle,
-  TEXT_SHOW_LOADING,
+  LoaderStatus,
+  LoaderMessages,
+  TimeLimit,
 };
