@@ -1,16 +1,11 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { ALLOWED_SORTING_TYPES, DateFormat } from '../const';
 
 dayjs.extend(duration);
-dayjs.extend(relativeTime);
 
 const getDurationEvent = (dateFrom, dateTo) =>
   dayjs(dateTo).diff(dayjs(dateFrom));
-
-const humanizeDateCalendarFormat = (date) =>
-  date ? dayjs(date).format(DateFormat.EVENT_TEMPLATE) : '';
 
 const humanizeDateFormat = (
   date,
@@ -131,7 +126,6 @@ const toggleButtonAttribute = ({ buttonElement, isDisabled = false }) =>
   buttonElement?.toggleAttribute('disabled', isDisabled);
 
 export {
-  humanizeDateCalendarFormat,
   humanizeDateFormat,
   humanizeDurationEvent,
   getDestinationById,
