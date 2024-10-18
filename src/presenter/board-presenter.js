@@ -1,6 +1,8 @@
 import {
   DEFAULT_FILTER_TYPE,
   DEFAULT_SORTING_TYPE,
+  LoaderMessages,
+  LoaderStatus,
   SortingType,
   TimeLimit,
   UpdateType,
@@ -15,8 +17,7 @@ import {
   compareByPrice,
 } from '../utils/utils';
 import BoardView from '../view/board-view/board-view';
-import FailureLoadView from '../view/failure-load-view/failure-load-view';
-import LoadingTripView from '../view/loading-trip-view/loading-trip-view';
+import LoaderMessageView from '../view/loader-message-view/loader-message-view';
 import NoPointsView from '../view/no-points-view/no-points-view';
 import PointListView from '../view/point-list-view/point-list-view';
 import SortView from '../view/sort-view/sort-view';
@@ -30,8 +31,13 @@ export default class BoardPresenter {
   #pointListComponent = new PointListView();
   #noPointsComponent = null;
   #sortComponent = null;
-  #loadingTripComponent = new LoadingTripView();
-  #failureLoadComponent = new FailureLoadView();
+  #loadingComponent = new LoaderMessageView(
+    LoaderMessages[LoaderStatus.LOADING]
+  );
+
+  #failureComponent = new LoaderMessageView(
+    LoaderMessages[LoaderStatus.FAILURE]
+  );
 
   #tripModel = null;
   #filterModel = null;
@@ -95,7 +101,6 @@ export default class BoardPresenter {
       if (this.#noPointsComponent) {
         remove(this.#noPointsComponent);
       }
-      this.#renderSort();
       this.#renderPointList();
     }
 
@@ -106,7 +111,7 @@ export default class BoardPresenter {
     render(this.#boardComponent, this.#boardContainer);
 
     if (this.#isLoading) {
-      this.#renderLoadingTrip();
+      this.#renderLoaderMessage(LoaderStatus.LOADING);
       return;
     }
 
@@ -134,7 +139,7 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
-    remove(this.#loadingTripComponent);
+    remove(this.#loadingComponent);
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);
     }
@@ -163,8 +168,15 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderLoadingTrip() {
-    render(this.#loadingTripComponent, this.#boardComponent.element);
+  #renderLoaderMessage(status) {
+    switch (status) {
+      case LoaderStatus.LOADING:
+        render(this.#loadingComponent, this.#boardComponent.element);
+        break;
+      case LoaderStatus.FAILURE:
+        render(this.#failureComponent, this.#boardComponent.element);
+        break;
+    }
   }
 
   #renderNoPoints() {
@@ -174,15 +186,16 @@ export default class BoardPresenter {
     render(this.#noPointsComponent, this.#boardComponent.element);
   }
 
-  #renderFailurLoad() {
-    render(this.#failureLoadComponent, this.#boardComponent.element);
-  }
-
   #renderPointList() {
     if (this.#pointListComponent === null) {
       this.#pointListComponent = new PointListView();
     }
     render(this.#pointListComponent, this.#boardComponent.element);
+  }
+
+  #removeLoadingComponent() {
+    this.#isLoading = false;
+    remove(this.#loadingComponent);
   }
 
   #isEmptyPoints() {
@@ -234,8 +247,7 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.INIT:
-        this.#isLoading = false;
-        remove(this.#loadingTripComponent);
+        this.#removeLoadingComponent();
         this.#newPointPresenter = new NewPointPresenter({
           pointListContainer: this.#pointListComponent.element,
           destinations: this.destinations,
@@ -246,12 +258,9 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.FAILURE:
-        this.#isLoading = false;
-        remove(this.#loadingTripComponent);
-        if (this.#noPointsComponent) {
-          remove(this.#noPointsComponent);
-        }
-        this.#renderFailurLoad();
+        this.#removeLoadingComponent();
+        remove(this.#noPointsComponent);
+        this.#renderLoaderMessage(LoaderStatus.FAILURE);
         break;
     }
   };

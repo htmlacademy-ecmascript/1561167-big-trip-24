@@ -104,7 +104,15 @@ const UrlHandle = {
   DELETE: 'points',
 };
 
-const TEXT_SHOW_LOADING = 'Loading...';
+const LoaderStatus = {
+  LOADING: 'LOADING',
+  FAILURE: 'FAILURE',
+};
+
+const LoaderMessages = {
+  [LoaderStatus.LOADING]: 'Loading...',
+  [LoaderStatus.FAILURE]: 'Failed to load latest route information',
+};
 
 const TimeLimit = {
   LOWER_LIMIT: 300,
@@ -129,6 +137,7 @@ export {
   END_POINT,
   Method,
   UrlHandle,
-  TEXT_SHOW_LOADING,
+  LoaderStatus,
+  LoaderMessages,
   TimeLimit,
 };
