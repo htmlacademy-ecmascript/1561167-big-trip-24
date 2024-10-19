@@ -113,7 +113,7 @@ const LoaderMessages = {
 
 const TimeLimit = {
   LOWER_LIMIT: 300,
-  UPPER_LIMIT: 1500,
+  UPPER_LIMIT: 1000,
 };
 
 export {

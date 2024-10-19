@@ -291,8 +291,7 @@ const createPointEditTemplate = ({
           </button>
           <button
             class="event__reset-btn"
-            type="reset"
-            ${isDisabled ? 'disabled' : ''}>
+            type="reset">
             ${isNewPoint ? 'Cancel' : valueResetButtonTemplate}
           </button>
           ${rollupButtonTemplate}
