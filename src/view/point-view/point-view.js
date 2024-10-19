@@ -1,4 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
+import { toggleButtonAttribute } from '../../utils/utils.js';
 import { createPointTemplate } from './template.js';
 
 export default class PointView extends AbstractView {
@@ -40,6 +41,11 @@ export default class PointView extends AbstractView {
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
+
+    toggleButtonAttribute({
+      buttonElement: evt.target.closest('.event__favorite-btn'),
+      isDisabled: true,
+    });
     this.#handleFavoriteClick();
   };
 }
